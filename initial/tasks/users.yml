@@ -1,17 +1,12 @@
 ---
 
 ### Create user accounts
-- name: create users
-  user: name="{{ item.name }}"
-        password="{{ item.homelab_password }}"
-        comment="{{ item.comment }}"
-        group="{{ item.group }}"
-        groups="{{ item.groups }}"
-        uid="{{ item.uid }}"
-        state=present
-        shell=/bin/bash
-  with_items: "{{ create_users }}"
-  tags: [ 'users' ]
+- name: Create local esxi user
+  vmware_local_user_manager:
+    hostname: 192.168.1.11
+    username: root
+    password: VMware1!
+    local_user_name: homelab
 
 - name: install ssh pubkeys for new users
   authorized_key: user="{{ item.name }}"
