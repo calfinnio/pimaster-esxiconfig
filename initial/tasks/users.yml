@@ -1,0 +1,31 @@
+---
+
+### Create user accounts
+- name: create users
+  user: name="{{ item.name }}"
+        password="{{ item.homelab_password }}"
+        comment="{{ item.comment }}"
+        group="{{ item.group }}"
+        groups="{{ item.groups }}"
+        uid="{{ item.uid }}"
+        state=present
+        shell=/bin/bash
+  with_items: "{{ create_users }}"
+  tags: [ 'users' ]
+
+- name: install ssh pubkeys for new users
+  authorized_key: user="{{ item.name }}"
+                  key="{{ lookup('file', '/home/homelab/.ssh/id_rsa.pub') }}"
+                  state=present
+  with_items: "{{ create_users }}"
+  tags: [ 'users' ]
+
+- name: Add homelab user to the sudoers
+  copy:
+      dest: "/etc/sudoers.d/homelab"
+      content: "homelab  ALL=(ALL)  NOPASSWD: ALL"
+
+- name: Change file ownership, group and permissions
+  file:
+    path: "/etc/sudoers.d/homelab"
+    mode: '0440'
