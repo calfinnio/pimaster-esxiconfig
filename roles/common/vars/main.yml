@@ -1,0 +1,5 @@
+---
+phys_esx:
+ - esxi_username: root
+   esxi_password: VMware1!
+   esxi_hostname: esx1.houseofbears.co.uk

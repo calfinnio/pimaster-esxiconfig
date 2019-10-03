@@ -1,0 +1,8 @@
+---
+- name: Create LabMgmt vSwitch
+  vmware_vswitch:
+    hostname: '{{ esxi_hostname }}'
+    username: '{{ esxi_username }}'
+    password: '{{ esxi_password }}'
+    switch: LabMgmt
+  with_items: "{{ phys_esx }}"
