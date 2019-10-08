@@ -1,0 +1,28 @@
+---
+
+### Create user accounts
+#- name: Create local esxi user
+#  vmware_local_user_manager:
+#    hostname: 192.168.1.11
+#    username: root
+#    password: VMware1!
+#    local_user_name: homelab
+#
+#- name: install ssh pubkeys for new users
+#  authorized_key: user="{{ item.name }}"
+#                  key="{{ lookup('file', '/home/homelab/.ssh/id_rsa.pub') }}"
+#                  state=present
+#  with_items: "{{ create_users }}"
+#  tags: [ 'users' ]
+#
+#- name: Add homelab user to the sudoers
+#  copy:
+#      dest: "/etc/sudoers.d/homelab"
+#      content: "homelab  ALL=(ALL)  NOPASSWD: ALL"
+#
+#- name: Change file ownership, group and permissions
+#  file:
+#    path: "/etc/sudoers.d/homelab"
+#    mode: '0440'
+- name: Test ESXi connectivity
+  command: esxcli network nic list
