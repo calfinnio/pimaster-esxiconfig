@@ -1,5 +1,15 @@
 ---
-phys_esx:
- - esxi_username: root
-   esxi_password: VMware1!
-   esxi_hostname: esx1.houseofbears.co.uk
+network_vars:
+ - vswitch_name: vswitch_LabMgmt
+   portgroup_name: pg_LabMgmt
+
+pfsense_vars:
+ - vm_name: pfsense_test
+   wan_pg: "VM Network"
+   wan_ip: 192.168.1.12
+   lan_pg: pg_LabMgmt
+   lan_ip: 10.64.0.1
+   datastore: General2
+   provision_mode: thin
+   ovftool_path: /vmfs/volumes/NFS/vmware-ovftool/ovftool
+   ovf_path: /vmfs/volumes/NFS/pfsense.ovf

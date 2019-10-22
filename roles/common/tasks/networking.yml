@@ -1,3 +1,14 @@
 ---
-- name: Create LabMgmt vSwitch
+- name: Add PiMaster DNS Server
   command: esxcli network ip dns server add -s 192.168.1.44
+
+- name: Remove default entry added during install
+  command: esxcli network ip dns server remove -s 192.168.1.1
+
+- name: Create vSwitch - LabMgmt
+  command: "esxcli network vswitch standard add --vswitch-name {{ item.vswitch_name }}"
+  with_items: "{{ network_vars }}"
+
+- name: Create Port Group
+  command: "esxcli network vswitch standard portgroup add --portgroup-name {{ item.portgroup_name }} --vswitch-name {{ item.vswitch_name }}"
+  with_items: "{{ network_vars }}"
