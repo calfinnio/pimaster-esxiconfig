@@ -18,18 +18,22 @@
 
 - debug:
     msg: "{{ vswitch_raw }}"
+  tags: ['vswitch']
 
 - name: convert list to var
   set_fact:
     vswitches: "{{ vswitch_raw.stdout_lines }}"
+  tags: ['vswitch']
 
 - debug:
     msg: "{{ vswitches }}"
+  tags: ['vswitch']
 
 - name: Create missing vswitches
-  command: "esxcli network vswitch standard add --vswitch-name "
+  command: "esxcli network vswitch standard add --vswitch-name {{ item.vswitch_name }}"
   with_items: "{{ network_vars }}"
-  when: item not in vswitches
+  when: item.vswitch_name not in vswitches
+  tags: ['vswitch']
 #- name: Create vSwitch - LabMgmt
 #  command: "esxcli network vswitch standard add --vswitch-name {{ item.vswitch_name }}"
 #  with_items: "{{ network_vars }}"
