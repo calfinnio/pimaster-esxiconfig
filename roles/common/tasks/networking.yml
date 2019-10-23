@@ -60,7 +60,7 @@
   tags: ['vswitch']
 
 - name: Create missing portgroups
-  command: "esxcli network vswitch standard portgroup add --portgroup_name {{ item.value.portgroup_name }} --vswitch-name {{ item.key }}"
+  command: "esxcli network vswitch standard portgroup add --portgroup-name {{ item.value.portgroup_name }} --vswitch-name {{ item.key }}"
   with_dict: "{{ network_vars }}"
   when: item.value.portgroup_name not in portgroups
   tags: ['vswitch']
