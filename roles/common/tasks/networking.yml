@@ -18,6 +18,7 @@
 
 - debug:
     msg: "{{ vswitch_raw }}"
+    verbosity: 2
   tags: ['vswitch']
 
 - name: convert list to var
