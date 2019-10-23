@@ -15,7 +15,6 @@
   changed_when: false
   check_mode: false
   tags: ['vswitch']
- 
 - debug:
   msg: "{{ vswitch_list }}"
 
