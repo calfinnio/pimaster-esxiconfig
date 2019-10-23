@@ -1,7 +1,7 @@
 ---
 network_vars:
- - vswitch_name: vswitch_LabMgmt
-   portgroup_name: pg_LabMgmt
+  vswitch_LabMgmt:
+    portgroup_name: pg_LabMgmt
 
 pfsense_vars:
  - vm_name: pfsense_test
