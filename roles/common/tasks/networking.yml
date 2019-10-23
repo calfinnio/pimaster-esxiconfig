@@ -31,7 +31,7 @@
     verbosity: 2
   tags: ['vswitch']
 
-- name: Get list of existing portgroups to decided which ones need creating/removing
+- name: Get list of existing portgroups to decided which ones need creating
   shell: "esxcli --formatter=csv --format-param=fields=\"Name,Virtual Switch\" network vswitch standard portgroup list"
   register: portgroup_raw
   changed_when: false
@@ -54,9 +54,15 @@
   tags: ['vswitch']
 
 - name: Create missing vswitches
-  command: "esxcli network vswitch standard add --vswitch-name {{ item.vswitch_name }}"
-  with_items: "{{ network_vars }}"
-  when: item.vswitch_name not in vswitches
+  command: "esxcli network vswitch standard add --vswitch-name {{ item.key }}"
+  with_dict: "{{ network_vars }}"
+  when: item.key not in vswitches
+  tags: ['vswitch']
+
+- name: Create missing portgroups
+  command: "esxcli network vswitch standard portgroup add --portgroup_name {{ item.value.portgroup_name }} --vswitch-name {{ item.key }}"
+  with_dict: "{{ network_vars }}"
+  when: item.value.portgroup_name not in portgroups
   tags: ['vswitch']
 #- name: Create vSwitch - LabMgmt
 #  command: "esxcli network vswitch standard add --vswitch-name {{ item.vswitch_name }}"
