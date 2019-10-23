@@ -28,6 +28,29 @@
 
 - debug:
     msg: "{{ vswitches }}"
+    verbosity: 2
+  tags: ['vswitch']
+
+- name: Get list of existing portgroups to decided which ones need creating/removing
+  shell: "esxcli --formatter=csv --format-param=fields=\"Name,Virtual Switch\" network vswitch standard portgroup list"
+  register: portgroup_raw
+  changed_when: false
+  check_mode: false
+  tags: ['vswitch']
+
+- name: Convert portgroup list to var
+  set_fact:
+    portgroups: "{{ portgroup_raw.stdout_lines }}"
+  tags: ['vswitch']
+
+- debug:
+    msg: "{{ portgroup_raw }}"
+    verbosity: 2
+  tags: ['vswitch']
+
+- debug:
+    msg: "{{ portgroups }}"
+    verbosity: 2
   tags: ['vswitch']
 
 - name: Create missing vswitches
