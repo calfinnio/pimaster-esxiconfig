@@ -25,6 +25,11 @@
 
 - debug:
     msg: "{{ vswitches }}"
+
+- name: Create missing vswitches
+  command: "esxcli network vswitch standard add --vswitch-name "
+  with_items: "{{ network_vars }}"
+  when: item not in vswitches
 #- name: Create vSwitch - LabMgmt
 #  command: "esxcli network vswitch standard add --vswitch-name {{ item.vswitch_name }}"
 #  with_items: "{{ network_vars }}"
