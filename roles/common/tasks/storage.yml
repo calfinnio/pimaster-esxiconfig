@@ -16,3 +16,15 @@
 - debug:
    msg: "{{ nfs_mounts }}"
   tags: ['nfs']
+
+- debug: 
+    msg: "{{ (nfs_mounts.VolumeName) }}"
+#- include: create_nfs.yml
+#  when: 
+
+#Get vmfs extents
+#if 1 - set_fact of name for vm install
+#if not > 0
+#find first disk
+#partition it and vmfs it
+
