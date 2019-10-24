@@ -1,0 +1,18 @@
+---
+#- name: Check existing NFS mounts
+  
+- name: Get NFS volume list to decide which ones need creating
+  shell: esxcli --debug --formatter=json --format-param=fields="Volume Name" storage nfs list
+  register: nfs_json
+  changed_when: false
+  check_mode: false
+  tags: ['nfs']
+
+- name: convert list to var
+  set_fact:
+    nfs_mounts: "{{ nfs_json.stdout|from_json }}"
+  tags: ['nfs']
+
+- debug:
+   msg: "{{ nfs_mounts }}"
+  tags: ['nfs']
