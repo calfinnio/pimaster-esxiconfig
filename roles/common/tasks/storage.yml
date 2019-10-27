@@ -3,23 +3,20 @@
   
 - name: Get NFS volume list to decide which ones need creating
   shell: esxcli --formatter=csv --format-param=fields="Volume Name" storage nfs list | awk 'NR > 1' | sed 's/,//'
-  register: nfs_json
+  register: nfs_csv
   changed_when: false
   check_mode: false
   tags: ['nfs']
 
-- name: convert nfs_json to var
+- name: convert nfs_csv to var
   set_fact:
-    nfs_mounts: "{{ nfs_json.stdout_lines }}"
+    nfs_mounts: "{{ nfs_csv.stdout_lines }}"
   tags: ['nfs']
 
 - debug:
    msg: "{{ nfs_mounts }}"
   tags: ['nfs']
 
-- debug: 
-    msg: "{{ ('nfs_mounts.VolumeName') }}"
-  tags: ['nfs']
 #- include: create_nfs.yml
 #  when: 
 
