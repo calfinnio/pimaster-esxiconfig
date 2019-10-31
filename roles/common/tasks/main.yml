@@ -1,4 +1,4 @@
 ---
 - include: networking.yml
-- include: vms.yml
 - include: storage.yml
+- include: vms.yml
