@@ -1,6 +1,9 @@
 ---
 #- name: Check existing NFS mounts
-  
+- name: import vars for nfs
+  include_vars: nfs-vars.yml
+  tags: ['nfs']
+
 - name: Get NFS volume list to decide which ones need creating
   shell: esxcli --formatter=csv --format-param=fields="Volume Name" storage nfs list | awk 'NR > 1' | sed 's/,//'
   register: nfs_csv
@@ -21,7 +24,7 @@
 - name: Mount NFS
   shell: esxcli storage nfs add --host={{ hostvars['masternodes'].ansible_host }} --share={{ nfs_share_path }} --volume-name={{ nfs_mount_name }}
   tags: ['nfs']
-  when: "{{ nfs_mount_name }} not in {{ nfs_mounts }}"
+  when: nfs_mount_name not in nfs_mounts
 
 #- include: create_nfs.yml
 #  when: 
