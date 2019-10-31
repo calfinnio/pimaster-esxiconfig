@@ -21,7 +21,7 @@
 - name: Mount NFS
   shell: esxcli storage nfs add --host={{ hostvars['masternodes'].ansible_host }} --share={{ nfs_share_path }} --volume-name={{ nfs_mount_name }}
   tags: ['nfs']
-  when: "{{ nfs_mount_name }} not in {{ nfs_mounts }}
+  when: "{{ nfs_mount_name }} not in {{ nfs_mounts }}"
 
 #- include: create_nfs.yml
 #  when: 
@@ -31,4 +31,3 @@
 #if not > 0
 #find first disk
 #partition it and vmfs it
-
