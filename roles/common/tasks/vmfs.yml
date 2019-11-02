@@ -1,0 +1,23 @@
+---
+
+- name: Get VMFS volume list to decide which ones need creating
+  shell: esxcli --formatter=csv  esxcli storage core device list > /tmp/devices.csv
+  tags: ["new_vmfs"]
+
+- name: Read CSV
+  read_csv:
+    path: /tmp/devices.csv
+    key: Device
+  register: phy_disks
+  tags: ["new_vmfs"]
+
+- name: debug for vmfs
+  debug:
+    msg: "{{ phy_disks }}"
+  tags: ["new_vmfs"]
+#Get vmfs extents
+#if 1 - set_fact of name for vm install
+#if not > 0
+#find first disk
+#partition it and vmfs it
+  #shell: esxcli --formatter=csv --format-param=fields="Volume Name,Mounted,Type,Size,Free" storage filesystem list
