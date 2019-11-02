@@ -26,7 +26,7 @@
   set_fact:
     physical_disk_id: "{{ item.key }}"
   loop: "{{ lookup('dict', phy_disks.dict) }}"
-  when: item.value.size > 1000
+  when: item.value.Size > 1000
   tags: ["new_vmfs", "vmfs"]
 
 - name: Debug selected disk
