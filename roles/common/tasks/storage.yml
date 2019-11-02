@@ -35,6 +35,7 @@
 - name: Read CSV
   read_csv:
     path: /tmp/filesystem.csv
+    key: UUID
   register: vmfs_mounts
   tags: ["vmfs"]
 
