@@ -28,16 +28,24 @@
 
 #VMFS Datastores
 - name: Get VMFS volume list to decide which ones need creating
-  shell: esxcli --formatter=csv --format-param=fields="Volume Name" storage filesystem list 
-  register: vmfs_csv
-  changed_when: false
-  check_mode: false
+  #shell: esxcli --formatter=csv --format-param=fields="Volume Name,Mounted,Type,Size,Free" storage filesystem list
+  shell: shell: esxcli storage filesystem list > /tmp/filesystem.csv
+  #register: vmfs_csv
+  #changed_when: false
+  #check_mode: false
   tags: ['vmfs']
 
-- name: convert vmfs_csv to var
-  set_fact:
-    vmfs_mounts: "{{ vmfs_csv.stdout_lines }}"
+- name: Read filesystems from CSV file and return a dictionary
+  read_csv:
+    path: /tmp/filesystem.csv
+    key: "Volume Name"
+  register: vmfs_mounts
   tags: ['vmfs']
+
+#- name: convert vmfs_csv to var
+#  set_fact:
+#    vmfs_mounts: "{{ vmfs_csv.stdout_lines }}"
+#  tags: ['vmfs']
 
 - debug:
    msg: "{{ vmfs_mounts }}"
