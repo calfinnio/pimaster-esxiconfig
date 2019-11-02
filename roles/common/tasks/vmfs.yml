@@ -28,7 +28,11 @@
   loop: "{{ lookup('dict', phy_disks.dict) }}"
   when: 
     - item.value.IsBootDevice|bool == false 
-    - item.value.IsUSB|bool == false 
+    - item.value.IsUSB|bool == false
+    - item.value.IsSSD|bool == false
+    - item.value.IsLocal|bool == true
+    - item.value.Status == "on"
+    - item.value.Size > 500000
   tags: ["new_vmfs", "vmfs"]
 
 - name: Debug selected disk
