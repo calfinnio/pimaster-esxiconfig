@@ -26,7 +26,7 @@
   set_fact:
     physical_disk_id: "{{ item.key }}"
   loop: "{{ lookup('dict', phy_disks.dict) }}"
-  when: item.value.IsBootDevice == true
+  when: item.value.IsBootDevice is true
   tags: ["new_vmfs", "vmfs"]
 
 - name: Debug selected disk
