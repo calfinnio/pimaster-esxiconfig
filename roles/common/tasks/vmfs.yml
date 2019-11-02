@@ -1,6 +1,6 @@
 ---
 
-- include: "{{ role_path }}/vars/vmfs_vars.yml"
+- include_vars: vmfs_vars.yml
   tags: ["new_vmfs", "vmfs"]
 
 - name: Get device list to decide which one to use
