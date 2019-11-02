@@ -16,7 +16,8 @@
     nfs_mounts: "{{ nfs_csv.stdout_lines }}"
   tags: ["nfs"]
 
-- debug:
+- name: debug for nfs
+  debug:
     msg: "{{ nfs_mounts }}"
   tags: ["nfs"]
 
@@ -28,11 +29,7 @@
 
 #VMFS Datastores
 - name: Get VMFS volume list to decide which ones need creating
-  #shell: esxcli --formatter=csv --format-param=fields="Volume Name,Mounted,Type,Size,Free" storage filesystem list
   shell: esxcli storage filesystem list > /tmp/filesystem.csv
-  #register: vmfs_csv
-  #changed_when: false
-  #check_mode: false
   tags: ["vmfs"]
 
 - name: Read filesystems from CSV file and return a dictionary
@@ -42,12 +39,8 @@
   register: vmfs_mounts
   tags: ["vmfs"]
 
-#- name: convert vmfs_csv to var
-#  set_fact:
-#    vmfs_mounts: "{{ vmfs_csv.stdout_lines }}"
-#  tags: ['vmfs']
-
-- debug:
+- name: debug for vmfs
+  debug:
     msg: "{{ vmfs_mounts }}"
   tags: ["vmfs"]
 #Get vmfs extents
@@ -55,3 +48,4 @@
 #if not > 0
 #find first disk
 #partition it and vmfs it
+  #shell: esxcli --formatter=csv --format-param=fields="Volume Name,Mounted,Type,Size,Free" storage filesystem list
