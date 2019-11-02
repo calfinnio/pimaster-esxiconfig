@@ -35,7 +35,6 @@
 - name: Read CSV
   read_csv:
     path: /tmp/filesystem.csv
-    key: "Volume Name"
   register: vmfs_mounts
   tags: ["vmfs"]
 
