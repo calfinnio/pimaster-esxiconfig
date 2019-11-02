@@ -43,10 +43,8 @@
     msg: "{{ vmfs_extents }}"
   tags: ["vmfs"]
 
-- name: Calculate number of vmfs extents
-  vars:
-    number_of_extents: "{{ vmfs_extents|length }}"
-  tags: ["vmfs"]
+#  vars:
+#    number_of_extents: "{{ vmfs_extents|length }}"
 
 - name: debug here if no extents
   debug:
