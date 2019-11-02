@@ -13,7 +13,7 @@
 
 - name: debug for vmfs
   debug:
-    msg: "{{ phy_disks.dict }}"
+    msg: "{{ phy_disks.dict.key }}"
   tags: ["new_vmfs", "vmfs"]
 
 - name: Get disk
