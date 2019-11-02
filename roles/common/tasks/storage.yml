@@ -44,14 +44,14 @@
   tags: ["vmfs"]
 
 - name: Calculate number of vmfs extents
-  var:
+  vars:
     number_of_extents: "{{ vmfs_extents|length }}"
   tags: ["vmfs"]
 
 - name: debug here if no extents
   debug:
     msg: "No VMFS extents"
-  when: vmfs_extents|length < 1
+  when: vmfs_extents|length < 1 
   
 - name: Get VMFS volume list to decide which ones need creating
   shell: esxcli --formatter=csv storage filesystem list > /tmp/filesystem.csv
