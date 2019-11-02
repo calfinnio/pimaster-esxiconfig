@@ -16,22 +16,23 @@
 #    msg: "{{ phy_disks }}"
 #  tags: ["new_vmfs", "vmfs"]
 
-- name: Print phone records
+- name: Print dictionary
   debug:
     msg: "{{ item.key }}: {{ item.value }}"
   loop: "{{ lookup('dict', phy_disks.dict)}}"
   tags: ["new_vmfs", "vmfs"]
 
-#- name: Get disk
-#  set_fact:
-#    physical_disk_id: "{{ item.key }}"
-#  loop: "{{ lookup('dict', phy_disks) }}"
-#  tags: ["new_vmfs", "vmfs"]
+- name: Get disk
+  set_fact:
+    physical_disk_id: "{{ item.key }}"
+  loop: "{{ lookup('dict', phy_disks.dict) }}"
+  when: item.value.size > 1000
+  tags: ["new_vmfs", "vmfs"]
 
-#- name: Debug selected disk
-#  debug:
-#    msg: "{{ physical_disk_id }}"
-#  tags: ["new_vmfs", "vmfs"]
+- name: Debug selected disk
+  debug:
+    msg: "{{ physical_disk_id }}"
+  tags: ["new_vmfs", "vmfs"]
 #Get vmfs extents
 #if 1 - set_fact of name for vm install
 #if not > 0
