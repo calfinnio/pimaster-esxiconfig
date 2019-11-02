@@ -2,28 +2,28 @@
 #- name: Check existing NFS mounts
 - name: import vars for nfs
   include_vars: nfs-vars.yml
-  tags: ['nfs']
+  tags: ["nfs"]
 
 - name: Get NFS volume list to decide which ones need creating
   shell: esxcli --formatter=csv --format-param=fields="Volume Name" storage nfs list | awk 'NR > 1' | sed 's/,//'
   register: nfs_csv
   changed_when: false
   check_mode: false
-  tags: ['nfs']
+  tags: ["nfs"]
 
 - name: convert nfs_csv to var
   set_fact:
     nfs_mounts: "{{ nfs_csv.stdout_lines }}"
-  tags: ['nfs']
+  tags: ["nfs"]
 
 - debug:
-   msg: "{{ nfs_mounts }}"
-  tags: ['nfs']
+    msg: "{{ nfs_mounts }}"
+  tags: ["nfs"]
 
 #Mount the NFS share from pimaster
 - name: Mount NFS
   shell: esxcli storage nfs add --host={{ hostvars['pimaster'].ansible_host }} --share={{ nfs_share_path }} --volume-name={{ nfs_mount_name }}
-  tags: ['nfs']
+  tags: ["nfs"]
   when: nfs_mount_name not in nfs_mounts
 
 #VMFS Datastores
@@ -33,14 +33,14 @@
   #register: vmfs_csv
   #changed_when: false
   #check_mode: false
-  tags: ['vmfs']
+  tags: ["vmfs"]
 
 - name: Read filesystems from CSV file and return a dictionary
   read_csv:
     path: /tmp/filesystem.csv
     key: "Volume Name"
   register: vmfs_mounts
-  tags: ['vmfs']
+  tags: ["vmfs"]
 
 #- name: convert vmfs_csv to var
 #  set_fact:
@@ -48,10 +48,8 @@
 #  tags: ['vmfs']
 
 - debug:
-   msg: "{{ vmfs_mounts }}"
-  tags: ['vmfs']
-
-
+    msg: "{{ vmfs_mounts }}"
+  tags: ["vmfs"]
 #Get vmfs extents
 #if 1 - set_fact of name for vm install
 #if not > 0
