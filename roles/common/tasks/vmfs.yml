@@ -19,7 +19,7 @@
 - name: Print phone records
   debug:
     msg: "{{ item.key }}: {{ item.value }}"
-  loop: "{{ lookup('dict', phy_disks)}}"
+  loop: "{{ lookup('dict', phy_disks.dict)}}"
   tags: ["new_vmfs", "vmfs"]
 
 #- name: Get disk
