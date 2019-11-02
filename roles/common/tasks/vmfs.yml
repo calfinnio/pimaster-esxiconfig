@@ -49,7 +49,7 @@
   tags: ["new_vmfs", "vmfs"]
 
 - name: Create partition
-  shell: partedUtil setptbl {{ vmfs_device_path }}{{ physical_disk_id }} gpt "1 {{ vmfs_start_sector }} {{ physical_disk_end_sector }} {{ vmfs_guid }} {{ vmfs_attribute }}"
+  shell: partedUtil setptbl {{ vmfs_device_path }}{{ physical_disk_id }} gpt "1 {{ vmfs_start_sector }} {{ physical_disk_end_sector.stdout }} {{ vmfs_guid }} {{ vmfs_attribute }}"
   tags: ["new_vmfs", "vmfs"]
 
 - name: Create vmfs
