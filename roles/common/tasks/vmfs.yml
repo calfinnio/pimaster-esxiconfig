@@ -1,5 +1,8 @@
 ---
 
+- include: vmfs_vars.yml
+  tags: ["new_vmfs", "vmfs"]
+
 - name: Get device list to decide which one to use
   shell: esxcli --formatter=csv --format-param=fields="Device,DisplayName,Size,DevfsPath,Status,IsLocal,IsSSD,IsUSB,IsBootDevice" storage core device list > /tmp/devices.csv
   tags: ["new_vmfs", "vmfs"]
@@ -39,6 +42,24 @@
   debug:
     msg: "{{ physical_disk_id }}"
   tags: ["new_vmfs", "vmfs"]
+
+- name: Get end sector of disk
+  shell: eval expr $(partedUtil getptbl /vmfs/devices/disks/naa.50000c0f01f37874 | tail -1 | awk '{print $1 " \\* " $2 " \\* " $3}') - 1
+  register: physical_disk_end_sector
+  tags: ["new_vmfs", "vmfs"]
+
+- name: Create partition
+  shell: partedUtil setptbl {{ vmfs_device_path }}{{ physical_disk_id }} gpt "1 {{ vmfs_start_sector }} {{ physical_disk_end_sector }} {{ vmfs_guid }} {{ vmfs_attribute }}"
+  tags: ["new_vmfs", "vmfs"]
+
+- name: Create vmfs
+  shell: vmkfstools -C vmfs{{ vmfs_version }} -S {{ vmfs_name }} {{ vmfs_device_path }}{{ physical_disk_id }}:1
+  tags: ["new_vmfs", "vmfs"]
+
+#start sector - 2048
+#end sector - eval expr $(partedUtil getptbl /vmfs/devices/disks/naa.50000c0f01f37874 | tail -1 | awk '{print $1 " \\* " $2 " \\* " $3}') - 1
+#vmfs guid - AA31E02A400F11DB9590000C2911D1B8
+#create vmfs - ~ # partedUtil setptbl /vmfs/devices/disks/naa.50000c0f01f37874 gpt "1 2048 250067789 AA31E02A400F11DB9590000C2911D1B8 0"
 #Get vmfs extents
 #if 1 - set_fact of name for vm install
 #if not > 0

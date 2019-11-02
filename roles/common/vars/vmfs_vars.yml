@@ -1,0 +1,7 @@
+---
+vmfs_guid: AA31E02A400F11DB9590000C2911D1B8
+vmfs_start_sector: 2048
+vmfs_attribute: 0
+vmfs_device_path: /vmfs/devices/disks/
+vmfs_version: 6
+vmfs_name: General1
