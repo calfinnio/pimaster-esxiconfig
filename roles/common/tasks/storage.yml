@@ -32,7 +32,7 @@
   shell: esxcli storage filesystem list > /tmp/filesystem.csv
   tags: ["vmfs"]
 
-- name: Read filesystems from CSV file and return a dictionary
+- name: Read CSV
   read_csv:
     path: /tmp/filesystem.csv
     key: "Volume Name"
