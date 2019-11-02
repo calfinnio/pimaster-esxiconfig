@@ -13,14 +13,13 @@
 
 - name: debug for vmfs
   debug:
-    msg: "{{ phy_disks }}"
+    msg: "{{ phy_disks.dict }}"
   tags: ["new_vmfs", "vmfs"]
 
 - name: Get disk
   set_fact:
     physical_disk_id: "{{ item.key }}"
   loop: "{{ lookup('dict', phy_disks) }}"
-  when: "item.key.size > 100"
   tags: ["new_vmfs", "vmfs"]
 
 - name: Debug selected disk
