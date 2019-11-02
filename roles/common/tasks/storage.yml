@@ -45,6 +45,6 @@
   tags: ["vmfs"]
 
 - name: Include a create VMFS when no extents
-  include: vmfs.yaml
+  include: "{{ role_path }}/tasks/vmfs.yaml"
   when: vmfs_extents.dict|length < 1
   tags: ["vmfs"]
