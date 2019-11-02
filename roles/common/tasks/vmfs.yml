@@ -1,7 +1,7 @@
 ---
 
 - name: Get device list to decide which one to use
-  shell: esxcli --formatter=csv storage core device list > /tmp/devices.csv
+  shell: esxcli --formatter=csv --format-param=fields="Device,DisplayName,Size,DevfsPath,Status,IsLocal,IsSSD,IsUSB,IsBootDevice" storage core device list > /tmp/devices.csv
   tags: ["new_vmfs", "vmfs"]
 
 - name: Read CSV
