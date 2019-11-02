@@ -38,38 +38,13 @@
   register: vmfs_extents
   tags: ["vmfs"]
 
-- name: debug for vmfs extents
-  debug:
-    msg: "{{ vmfs_extents }}"
-  tags: ["vmfs"]
-
-#  vars:
-#    number_of_extents: "{{ vmfs_extents|length }}"
-
 - name: debug here if no extents
   debug:
-    msg: "No VMFS extents"
-  when: vmfs_extents|length < 1
-  tags: ["vmfs"]
-  
-- name: Get VMFS volume list to decide which ones need creating
-  shell: esxcli --formatter=csv storage filesystem list > /tmp/filesystem.csv
+    msg: "No VMFS extents - creating one..."
+  when: vmfs_extents.dict|length < 1
   tags: ["vmfs"]
 
-- name: Read CSV
-  read_csv:
-    path: /tmp/filesystem.csv
-    key: UUID
-  register: vmfs_mounts
+- name: Include a create VMFS when no extents
+  include: vmfs.yaml
+  when: vmfs_extents.dict|length < 1
   tags: ["vmfs"]
-
-- name: debug for vmfs
-  debug:
-    msg: "{{ vmfs_mounts }}"
-  tags: ["vmfs"]
-#Get vmfs extents
-#if 1 - set_fact of name for vm install
-#if not > 0
-#find first disk
-#partition it and vmfs it
-  #shell: esxcli --formatter=csv --format-param=fields="Volume Name,Mounted,Type,Size,Free" storage filesystem list
