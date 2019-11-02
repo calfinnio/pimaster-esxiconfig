@@ -1,6 +1,6 @@
 ---
 
-- name: Get VMFS volume list to decide which ones need creating
+- name: Get device list to decide which one to use
   shell: esxcli --formatter=csv  esxcli storage core device list > /tmp/devices.csv
   tags: ["new_vmfs", "vmfs"]
 
