@@ -29,7 +29,7 @@
 
 #VMFS Datastores
 - name: Get VMFS volume list to decide which ones need creating
-  shell: esxcli storage filesystem list > /tmp/filesystem.csv
+  shell: esxcli --formatter=csv storage filesystem list > /tmp/filesystem.csv
   tags: ["vmfs"]
 
 - name: Read CSV
