@@ -1,29 +1,29 @@
 ---
 
 - include_vars: vmfs_vars.yml
-  tags: ["new_vmfs", "vmfs"]
+  tags: ["new_vmfs"]
 
 - name: Get device list to decide which one to use
   shell: esxcli --formatter=csv --format-param=fields="Device,DisplayName,Size,DevfsPath,Status,IsLocal,IsSSD,IsUSB,IsBootDevice" storage core device list > /tmp/devices.csv
-  tags: ["new_vmfs", "vmfs"]
+  tags: ["new_vmfs"]
 
 - name: Read CSV
   read_csv:
     path: /tmp/devices.csv
     key: Device
   register: phy_disks
-  tags: ["new_vmfs", "vmfs"]
+  tags: ["new_vmfs"]
 
 #- name: debug for vmfs
 #  debug:
 #    msg: "{{ phy_disks }}"
-#  tags: ["new_vmfs", "vmfs"]
+#  tags: ["new_vmfs"]
 
 - name: Print dictionary
   debug:
     msg: "{{ item.key }}: {{ item.value }}"
   loop: "{{ lookup('dict', phy_disks.dict)}}"
-  tags: ["new_vmfs", "vmfs"]
+  tags: ["new_vmfs"]
 
 - name: Get disk
   set_fact:
@@ -36,25 +36,25 @@
     - item.value.IsLocal|bool == true
     - item.value.Status == "on"
     - item.value.Size > 500000
-  tags: ["new_vmfs", "vmfs"]
+  tags: ["new_vmfs"]
 
 - name: Debug selected disk
   debug:
     msg: "{{ physical_disk_id }}"
-  tags: ["new_vmfs", "vmfs"]
+  tags: ["new_vmfs"]
 
 - name: Get end sector of disk
   shell: eval expr $(partedUtil getptbl /vmfs/devices/disks/naa.50000c0f01f37874 | tail -1 | awk '{print $1 " \\* " $2 " \\* " $3}') - 1
   register: physical_disk_end_sector
-  tags: ["new_vmfs", "vmfs"]
+  tags: ["new_vmfs"]
 
 - name: Create partition
   shell: partedUtil setptbl {{ vmfs_device_path }}{{ physical_disk_id }} gpt "1 {{ vmfs_start_sector }} {{ physical_disk_end_sector.stdout }} {{ vmfs_guid }} {{ vmfs_attribute }}"
-  tags: ["new_vmfs", "vmfs"]
+  tags: ["new_vmfs"]
 
 - name: Create vmfs
   shell: vmkfstools -C vmfs{{ vmfs_version }} -S {{ vmfs_name }} {{ vmfs_device_path }}{{ physical_disk_id }}:1
-  tags: ["new_vmfs", "vmfs"]
+  tags: ["new_vmfs"]
 
 #start sector - 2048
 #end sector - eval expr $(partedUtil getptbl /vmfs/devices/disks/naa.50000c0f01f37874 | tail -1 | awk '{print $1 " \\* " $2 " \\* " $3}') - 1
