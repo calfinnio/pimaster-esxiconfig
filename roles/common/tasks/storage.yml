@@ -63,7 +63,7 @@
 
 - name: debug here if no extents
   debug:
-    var: "{{ vmfs_extents.dict }}"
+    var: "{{ vmfs_extents }}"
   tags: ["vmfs"]
 
 - name: Checking that there is a datastore post creation
