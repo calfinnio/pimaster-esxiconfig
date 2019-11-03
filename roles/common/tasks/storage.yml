@@ -61,11 +61,11 @@
   register: vmfs_extents
   tags: ["vmfs"]
 
-- name: Include a create VMFS when no extents
+- name: Checking that there is a datastore post creation
   debug:
     msg: "Found datastore"
   when: 
     - vmfs_extents.dict|length != 0
-    - vmfs_name in vmfs_extents.dict 
+    #- vmfs_name in vmfs_extents.dict 
   #delegate_to: localhost
   tags: ["vmfs"]
