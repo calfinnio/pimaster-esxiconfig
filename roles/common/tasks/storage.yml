@@ -35,7 +35,7 @@
 - name: Read CSV
   read_csv:
     path: /tmp/vmfsextents.csv
-    key: Device
+    key: DeviceName
   register: vmfs_extents
   tags: ["vmfs"]
 
@@ -59,7 +59,7 @@
 - name: Read CSV
   read_csv:
     path: /tmp/vmfsextents.csv
-    key: Device
+    key: DeviceName
   register: vmfs_extents
   tags: ["vmfs"]
 
