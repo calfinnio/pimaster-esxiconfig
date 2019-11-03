@@ -61,6 +61,11 @@
   register: vmfs_extents
   tags: ["vmfs"]
 
+- name: debug here if no extents
+  debug:
+    var: "{{ vmfs_extents.dict }}"
+  tags: ["vmfs"]
+
 - name: Checking that there is a datastore post creation
   debug:
     msg: "Found datastore"
