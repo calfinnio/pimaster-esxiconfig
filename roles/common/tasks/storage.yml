@@ -28,8 +28,9 @@
   when: nfs_mount_name not in nfs_mounts
 
 #VMFS Datastores
-- include_vars: vmfs_vars.yml
-  tags: ["new_vmfs"]
+- name: Import VMFS variables
+  include_vars: vmfs_vars.yml
+  tags: ["vmfs"]
 
 - name: Get VMFS extent list to decide which ones need creating
   shell: esxcli --formatter=csv storage vmfs extent list > /tmp/vmfsextents.csv
