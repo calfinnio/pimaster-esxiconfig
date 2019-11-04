@@ -27,6 +27,14 @@
   tags: ["nfs"]
   when: nfs_mount_name not in nfs_mounts
 
+- name: Set default vm installation datastore
+  set_fact:
+    default_nfs: "{{ nfs_mount_name }}"
+  tags: ["nfs"]
+- name: debug for nfs
+  debug:
+    msg: "{{ default_nfs }}"
+  tags: ["nfs"]
 #VMFS Datastores
 - name: Import VMFS variables
   include_vars: vmfs_vars.yml
