@@ -31,6 +31,7 @@
   set_fact:
     default_nfs: "{{ nfs_mount_name }}"
   tags: ["nfs"]
+
 - name: debug for nfs
   debug:
     msg: "{{ default_nfs }}"
@@ -64,6 +65,9 @@
   tags: ["vmfs"]
 
 #Recheck VMFS extents
+- include_vars: vmfs_vars.yml
+  tags: ["new_vmfs"]
+  
 - name: Get VMFS extent list to decide which ones need creating
   shell: esxcli --formatter=csv storage vmfs extent list > /tmp/vmfsextents.csv
   tags: ["vmfs"]
@@ -87,3 +91,8 @@
     - vmfs_extents.dict|length != 0
     - vmfs_name in vmfs_extents.dict 
   tags: ["vmfs"]
+
+- name: Set default vm installation datastore
+  set_fact:
+    default_datastore: "{{ vmfs_name }}"
+  tags: ["new_vmfs"]
