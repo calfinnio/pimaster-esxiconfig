@@ -67,7 +67,7 @@
 #Recheck VMFS extents
 - include_vars: vmfs_vars.yml
   tags: ["new_vmfs"]
-  
+
 - name: Get VMFS extent list to decide which ones need creating
   shell: esxcli --formatter=csv storage vmfs extent list > /tmp/vmfsextents.csv
   tags: ["vmfs"]
@@ -89,10 +89,10 @@
     msg: "Found correct datastore"
   when: 
     - vmfs_extents.dict|length != 0
-    - vmfs_name in vmfs_extents.dict 
+    - vmfs_name in vmfs_extents.dict[0] 
   tags: ["vmfs"]
 
 - name: Set default vm installation datastore
   set_fact:
     default_datastore: "{{ vmfs_name }}"
-  tags: ["new_vmfs"]
+  tags: ["vmfs"]
