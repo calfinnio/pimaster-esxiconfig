@@ -87,7 +87,7 @@
 - name: Checking that there is a datastore post creation
   debug:
     msg: "Found correct datastore"
-  loop: "{{ lookup('dict', vmfs_extents.dict) }}"
+  loop: "{{ q('dict', vmfs_extents.dict) }}"
   when: 
     - vmfs_extents.dict|length != 0
     - vmfs_name in item.value.VolumeName 
