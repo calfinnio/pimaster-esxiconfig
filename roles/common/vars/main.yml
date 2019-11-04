@@ -23,5 +23,5 @@ pfsense_vars:
    lan_ip: 10.64.0.1
    datastore: General2
    provision_mode: thin
-   ovftool_path: /vmfs/volumes/{{ nfs_mount_name }}/vmware-ovftool/ovftool
-   ovf_path: /vmfs/volumes/{{ nfs_mount_name }}/pfsense.ovf
+   ovftool_path: /vmfs/volumes/{{ default_nfs }}/vmware-ovftool/ovftool
+   ovf_path: /vmfs/volumes/{{ default_nfs }}/pfsense.ovf
