@@ -30,7 +30,7 @@
 
 - name: Deploy pfsense OVF
   command: "{{ pfsense_ovftool_path }} --acceptAllEulas --noSSLVerify --name={{ pfsense_vm_name }} --X:logFile=ovftool.log -dm={{ pfsense_provision_mode }} -ds={{ default_datastore }} {{ pfsense_ovf_path }} \"vi://{{ physical_esx.esx_user }}:{{ physical_esx.esx_password }}@{{ physical_esx.esx_address }}\""
-  when: pfsense_vm_name not in vms.dict.key
+  when: pfsense_vm_name not in vms.dict
   tags: ["pfsense", "vms"]
 
 #- name: Enable autostart
