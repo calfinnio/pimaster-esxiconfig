@@ -72,4 +72,16 @@
   until: result is not failed
   delegate_to: localhost
   tags: ["vcsa_deploy", "vms"]
+
+- name: Pause play until a URL is reachable from this host
+  uri:
+    url: "http://{{ vcsa_ip_addr }}/ui"
+    follow_redirects: none
+    method: GET
+  register: _result
+  until: _result.status == 200
+  retries: 720 # 720 * 5 seconds = 1hour (60*60/5)
+  delay: 5 # Every 5 seconds
+  delegate_to: localhost
+  tags: ["vcsa_deploy", "vms"]
   
