@@ -22,7 +22,8 @@
   tags: ["golang"]
 
 - name: govc test
-  local_action: govc version
+  connection: local
+  shell: govc version
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
