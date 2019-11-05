@@ -9,8 +9,8 @@
 
 - name: Set GOPATH
   set_fact:
-    go_path: "{{ lookup('env', 'GOPATH') | default(ansible_env.HOME+'/go', true) }}"
-    go_bin: "{{ lookup('env', 'GOPATH') | default(ansible_env.HOME+'/go/bin/', true) }}"
+    go_path: "{{ ansible_env.HOME }}/go/"
+    go_bin: "{{ ansible_env.HOME }}/go/bin/"
   delegate_to: localhost
   tags: ["always", "golang"]
 
@@ -19,4 +19,17 @@
     msg:
     - "GOPATH is {{ go_path }}"
     - "PATH is {{ go_bin }}"
+  tags: ["golang"]
+
+- name: govc test
+  shell: govc version
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+  register: govc_result
+  when: not result|failed
+  tags: ["golang"] 
+
+- debug:
+    msg: "{{ govc_result }}"
   tags: ["golang"]
