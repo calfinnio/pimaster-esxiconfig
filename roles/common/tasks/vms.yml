@@ -66,5 +66,6 @@
   retries: 150
   delay: 10
   until: result is not failed
+  delegate_to: localhost
   tags: ["vcsa_deploy", "vms"]
   
