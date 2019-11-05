@@ -69,7 +69,7 @@
   set_fact:
     default_portgroup: "{{ item.value.portgroup_name }}"
   with_dict: "{{ network_vars }}"
-  when: item.value.defult|bool == true
+  when: item.value.default|bool == true
   tags: ['vswitch']
 #- name: Create vSwitch - LabMgmt
 #  command: "esxcli network vswitch standard add --vswitch-name {{ item.vswitch_name }}"
