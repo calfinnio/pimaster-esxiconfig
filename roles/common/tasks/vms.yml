@@ -42,6 +42,10 @@
     var: esx_password
   tags: ["vms"]
 
+- name: Include vcsa vars
+  include_vars: vcsa_vars.yml
+  tags: ["vcsa_deploy", "vms"]
+
 - name: deploy VCSA
   shell: govc import.ova -options=vcsa3.json /mnt/usb/vcsa_iso/vcsa/VMware-vCenter-Server-Appliance-6.7.0.40000-14367737_OVF10.ova 
   environment:
