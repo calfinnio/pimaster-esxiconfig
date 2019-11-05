@@ -22,7 +22,7 @@
   tags: ["golang"]
 
 - name: govc test
-  shell: govc version
+  local_action: govc version
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
