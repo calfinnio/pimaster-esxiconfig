@@ -13,3 +13,10 @@
     go_bin: "{{ lookup('env', 'GOPATH') | default(ansible_env.HOME+'/go/bin/', true) }}"
   delegate_to: localhost
   tags: ["always", "golang"]
+
+- name: debug task to print out paths set above
+  debug:
+    msg:
+    - "GOPATH is {{ go_path }}"
+    - "PATH is {{ go_bin }}"
+  tags: ["golang"]
