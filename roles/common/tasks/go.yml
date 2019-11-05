@@ -27,7 +27,6 @@
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
   register: govc_result
-  when: not result|failed
   tags: ["golang"] 
 
 - debug:
