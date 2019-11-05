@@ -10,7 +10,7 @@
 - name: Set GOPATH
   set_fact:
     go_path: "{{ ansible_env.HOME }}/go/"
-    go_bin: "{{ ansible_env.HOME }}/go/bin/"
+    go_bin: "/home/homelab/go/bin/"
   delegate_to: localhost
   tags: ["always", "golang"]
 
@@ -32,4 +32,9 @@
 
 - debug:
     msg: "{{ govc_result }}"
+  tags: ["golang"]
+
+- name: debug variable
+  debug:
+    msg: "{{ ansible_env.HOME }}"
   tags: ["golang"]
