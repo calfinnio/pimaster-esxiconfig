@@ -1,10 +1,5 @@
 ---
+- include: go.yml
 - include: networking.yml
 - include: storage.yml
 - include: vms.yml
-
-- name: Set GOPATH
-  set_fact:
-    go_path: "{{ lookup('env', 'GOPATH') | default(ansible_env.HOME+'/go', true) }}"
-    go_bin: "{{ lookup('env', 'GOPATH') | default(ansible_env.HOME+'/go/bin/', true) }}"
-  tags: ["always"]
