@@ -54,5 +54,7 @@
     GOVC_DATASTORE: "{{ default_datastore }}"
     GOVC_NETWORK: "{{ default_portgroup }}"
     GOVC_RESOURCE_POOL: "*/Resources"
+  async: 3600
+  poll: 5
   delegate_to: localhost
   tags: ["vcsa_deploy", "vms"]
