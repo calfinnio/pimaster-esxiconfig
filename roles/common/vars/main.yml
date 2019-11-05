@@ -2,8 +2,7 @@
 network_vars:
   vswitch_LabMgmt:
     portgroup_name: pg_LabMgmt
-  vswitch_LabMgmt2:
-    portgroup_name: pg_LabMgmt2
+    default: True
 
 datastore_vars:
   General1:
@@ -21,7 +20,6 @@ pfsense_vars:
    wan_ip: 192.168.1.12
    lan_pg: pg_LabMgmt
    lan_ip: 10.64.0.1
-   datastore: General2
    provision_mode: thin
    ovftool_path: /vmfs/volumes/{{ default_nfs }}/vmware-ovftool/ovftool
    ovf_path: /vmfs/volumes/{{ default_nfs }}/pfsense.ovf

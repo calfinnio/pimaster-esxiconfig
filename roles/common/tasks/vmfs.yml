@@ -23,6 +23,7 @@
   debug:
     msg: "{{ item.key }}: {{ item.value }}"
   loop: "{{ lookup('dict', phy_disks.dict)}}"
+  verbosity: 2
   tags: ["new_vmfs"]
 
 - name: Get disk
@@ -41,6 +42,7 @@
 - name: Debug selected disk
   debug:
     msg: "{{ physical_disk_id }}"
+  verbosity: 2
   tags: ["new_vmfs"]
 
 - name: Get end sector of disk
@@ -56,10 +58,7 @@
   shell: vmkfstools -C vmfs{{ vmfs_version }} -S {{ vmfs_name }} {{ vmfs_device_path }}{{ physical_disk_id }}:1
   tags: ["new_vmfs"]
 
-- name: SEt default vm installation datastore
-  set_fact:
-    default_datastore: "{{ vmfs_name }}"
-  tags: ["new_vmfs"]
+
 #start sector - 2048
 #end sector - eval expr $(partedUtil getptbl /vmfs/devices/disks/naa.50000c0f01f37874 | tail -1 | awk '{print $1 " \\* " $2 " \\* " $3}') - 1
 #vmfs guid - AA31E02A400F11DB9590000C2911D1B8

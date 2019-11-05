@@ -1,0 +1,10 @@
+---
+vcsa_vm_name: vcsa
+vcsa_network: pg_LabMgmt
+vcsa_ip_addr: 10.64.0.20
+vcsa_ip_prefix: 24
+vcsa_gateway: 10.64.0.1
+vcsa_dns: 10.64.0.1
+vcsa_dns_name: vcsa.houseofbears.co.uk
+vcsa_sso_domain: vsphere.local
+vcsa_site_name: Site01

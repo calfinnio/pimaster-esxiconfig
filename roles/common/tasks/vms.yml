@@ -14,3 +14,19 @@
 
 #- name: Enable autostart
 #- name: Deploy VCSA
+- name: template VCSA JSON
+
+- name: deploy VCSA
+  shell: govc import.ova -options=vcsa3.json /mnt/usb/vcsa_iso/vcsa/VMware-vCenter-Server-Appliance-6.7.0.40000-14367737_OVF10.ova 
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ esx_address }}"
+    GOVC_USERNAME: "{{ esx_user }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_DATASTORE: "{{ default_vmfs }}"
+    GOVC_NETWORK: "{{ default_portgroup }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  delegate_to: localhost
+  tags: ["vcsa_deploy"]
