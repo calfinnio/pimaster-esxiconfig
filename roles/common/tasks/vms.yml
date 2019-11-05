@@ -76,8 +76,9 @@
 - name: Pause play until a URL is reachable from this host
   uri:
     url: "http://{{ vcsa_ip_addr }}/ui"
-    follow_redirects: none
+    follow_redirects: all
     method: GET
+    validate_certs: no
   register: _result
   until: _result.status == 200
   retries: 720 # 720 * 5 seconds = 1hour (60*60/5)
