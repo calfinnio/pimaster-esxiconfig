@@ -2,7 +2,6 @@
 - name: Include secrets
   include_vars: 
     file: secrets_physical_esx.yml
-    name: physical_esx
 
 - name: import vars for nfs
   include_vars: nfs-vars.yml
@@ -29,7 +28,7 @@
   tags: ["pfsense", "vms"]
 
 - name: Deploy pfsense OVF
-  command: "{{ pfsense_ovftool_path }} --acceptAllEulas --noSSLVerify --name={{ pfsense_vm_name }} --X:logFile=ovftool.log -dm={{ pfsense_provision_mode }} -ds={{ default_datastore }} {{ pfsense_ovf_path }} \"vi://{{ physical_esx.esx_user }}:{{ physical_esx.esx_password }}@{{ physical_esx.esx_address }}\""
+  command: "{{ pfsense_ovftool_path }} --acceptAllEulas --noSSLVerify --name={{ pfsense_vm_name }} --X:logFile=ovftool.log -dm={{ pfsense_provision_mode }} -ds={{ default_datastore }} {{ pfsense_ovf_path }} \"vi://{{ esx_user }}:{{ esx_password }}@{{ esx_address }}\""
   when: pfsense_vm_name not in vms.dict
   tags: ["pfsense", "vms"]
 
@@ -45,7 +44,7 @@
     GOVC_INSECURE: 1
     GOVC_URL: "{{ esx_address }}"
     GOVC_USERNAME: "{{ esx_user }}"
-    GOVC_PASSWORD: "{{ physical_esx.esx_password }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_DATASTORE: "{{ default_vmfs }}"
     GOVC_NETWORK: "{{ default_portgroup }}"
     GOVC_RESOURCE_POOL: "*/Resources"
