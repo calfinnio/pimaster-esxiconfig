@@ -38,3 +38,8 @@
   debug:
     msg: "{{ ansible_env.HOME }}"
   tags: ["golang"]
+
+- name: Printing the environment​ variable in Ansible
+  debug:
+    msg: "{{ lookup('env','HOME') }}"
+  tags: ["golang"]
