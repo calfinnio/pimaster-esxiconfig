@@ -19,7 +19,7 @@
 - name: debug for nfs
   debug:
     msg: "{{ nfs_mounts }}"
-  verbosity: 2
+    verbosity: 2
   tags: ["nfs"]
 
 #Mount the NFS share from pimaster
@@ -36,7 +36,7 @@
 - name: debug for nfs
   debug:
     msg: "{{ default_nfs }}"
-  verbosity: 2
+    verbosity: 2
   tags: ["nfs"]
 #VMFS Datastores
 - name: Import VMFS variables
@@ -57,8 +57,8 @@
 - name: debug here if no extents
   debug:
     msg: "No VMFS extents - creating one..."
+    verbosity: 2
   when: vmfs_extents.dict|length < 1
-  verbosity: 2
   tags: ["vmfs"]
 
 - name: Include a create VMFS when no extents
@@ -84,7 +84,7 @@
 - name: debug here for extents
   debug:
     msg: "{{ vmfs_extents }}"
-  verbosity: 2
+    verbosity: 2
   tags: ["vmfs"]
 
 - name: Checking that there is a datastore post creation
