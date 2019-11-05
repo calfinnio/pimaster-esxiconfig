@@ -1,5 +1,5 @@
 ---
-vcsa_vm_name: vcsa
+vcsa_vm_name: VCSA2
 vcsa_network: pg_LabMgmt
 vcsa_ip_addr: 10.64.0.20
 vcsa_ip_prefix: 24

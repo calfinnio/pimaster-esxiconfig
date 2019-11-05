@@ -57,4 +57,14 @@
   async: 3600
   poll: 5
   delegate_to: localhost
+  when: vcsa_vm_name not in vms.dict
   tags: ["vcsa_deploy", "vms"]
+
+- name: Wait for ping  to VCSA
+  command: /bin/ping -c 1 {{ vcsa_ip_addr }}
+  register: result
+  retries: 150
+  delay: 10
+  until: result is not failed
+  tags: ["vcsa_deploy", "vms"]
+  
