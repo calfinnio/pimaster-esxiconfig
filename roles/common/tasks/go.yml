@@ -1,4 +1,11 @@
 ---
+- name: check go version
+  command: go version
+  register: result
+  changed_when: no
+  ignore_errors: true
+  tags: ["always","golang"]
+
 - name: Set GOPATH
   set_fact:
     go_path: "{{ lookup('env', 'GOPATH') | default(ansible_env.HOME+'/go', true) }}"
