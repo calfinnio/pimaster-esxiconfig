@@ -18,6 +18,12 @@
   register: vms
   tags: ["pre_vms"]
 
+- name: Debug to show VMs
+  debug:
+    msg: "{{ vms }}"
+    verbosity: 2
+  tags: ["pre_vms"]
+
 - name: Deploy pfsense OVF
   command: "{{ item.ovftool_path }} --acceptAllEulas --noSSLVerify --name={{ item.vm_name }} --X:logFile=ovftool.log -dm={{ item.provision_mode }} -ds={{ default_datastore }} {{ item.ovf_path }} \"vi://{{ physical_esx.esx_user }}:{{ physical_esx.esx_password }}@{{ physical_esx.esx_address }}\""
   with_items: "{{ pfsense_vars }}"
