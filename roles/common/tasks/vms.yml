@@ -2,9 +2,11 @@
 - name: Include secrets
   include_vars: 
     file: secrets_physical_esx.yml
+  tags: ["vms"]
 
 - name: import vars for nfs
   include_vars: nfs-vars.yml
+  tags: ["vms"]
 
 - name: Get VMs
   shell: esxcli --formatter=csv vm process list > /tmp/vms.csv
@@ -39,7 +41,7 @@
   debug:
     var: esx_password
   tags: ["vms"]
-  
+
 - name: deploy VCSA
   shell: govc import.ova -options=vcsa3.json /mnt/usb/vcsa_iso/vcsa/VMware-vCenter-Server-Appliance-6.7.0.40000-14367737_OVF10.ova 
   environment:
