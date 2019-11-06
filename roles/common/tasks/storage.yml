@@ -52,6 +52,11 @@
   register: st
   tags: ["vmfs"]
 
+- name: debug of wc -c command
+  debug:
+    var: st
+  tags: ["vmfs"]
+
 - name: Read CSV
   read_csv:
     path: /tmp/vmfsextents.csv
