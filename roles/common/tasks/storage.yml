@@ -28,7 +28,7 @@
   tags: ["nfs"]
   when: nfs_mount_name not in nfs_mounts
 
-- name: Set default vm installation datastore
+- name: Set default nfs datastore
   set_fact:
     default_nfs: "{{ nfs_mount_name }}"
   tags: ["nfs"]
@@ -47,23 +47,29 @@
   shell: esxcli --formatter=csv storage vmfs extent list > /tmp/vmfsextents.csv
   tags: ["vmfs"]
 
+- name: stat file to check it is not zero
+  shell: wc -c /tmp/vmfsextents.csv  | awk '{print $1}'
+  register: st
+  tags: ["vmfs"]
+
 - name: Read CSV
   read_csv:
     path: /tmp/vmfsextents.csv
     key: DeviceName
   register: vmfs_extents
+  when: st.stdout != 0
   tags: ["vmfs"]
 
 - name: debug here if no extents
   debug:
     msg: "No VMFS extents - creating one..."
     verbosity: 2
-  when: vmfs_extents.dict|length < 1
+  when: st.stdout == 0
   tags: ["vmfs"]
 
 - name: Include a create VMFS when no extents
   include: "{{ role_path }}/tasks/vmfs.yml"
-  when: vmfs_extents.dict|length < 1
+  when: st.stdout == 0
   tags: ["vmfs"]
 
 #Recheck VMFS extents
