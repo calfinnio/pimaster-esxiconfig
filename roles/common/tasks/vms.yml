@@ -13,7 +13,7 @@
   tags: ["pre_vms", "vms"]
 
 - name: stat file to check it is not zero
-  shell: wc -c /tmp/vmfsextents.csv  | awk '{print $1}'
+  shell: wc -c /tmp/vms.csv  | awk '{print $1}'
   register: stvm
   tags: ["vmfs"]
 
