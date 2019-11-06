@@ -58,6 +58,7 @@
 
 - name: Deploy pfsense OVF
   command: "{{ pfsense_ovftool_path }} --acceptAllEulas --noSSLVerify --name={{ pfsense_vm_name }} --X:logFile=/vmfs/volumes/{{ nfs_mount_name }}/ovftool.log -dm={{ pfsense_provision_mode }} -ds={{ default_datastore }} --powerOn {{ pfsense_ovf_path }} \"vi://{{ esx_user }}:{{ esx_password }}@{{ esx_address }}\""
+  when: pfsense_vm_name not in vms.dict
   tags: ["pfsense"]
 
 - name: Include vcsa vars
@@ -78,6 +79,7 @@
     GOVC_RESOURCE_POOL: "*/Resources"
   async: 3600
   poll: 5
+  when: vcsa_vm_name not in vms.dict
   delegate_to: localhost
   tags: ["vcsa_deploy"]
 
