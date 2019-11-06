@@ -22,8 +22,8 @@
 - name: Print dictionary
   debug:
     msg: "{{ item.key }}: {{ item.value }}"
+    verbosity: 2
   loop: "{{ lookup('dict', phy_disks.dict)}}"
-  verbosity: 2
   tags: ["new_vmfs"]
 
 - name: Get disk
@@ -42,7 +42,7 @@
 - name: Debug selected disk
   debug:
     msg: "{{ physical_disk_id }}"
-  verbosity: 2
+    verbosity: 2
   tags: ["new_vmfs"]
 
 - name: Get end sector of disk
