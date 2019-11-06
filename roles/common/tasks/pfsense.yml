@@ -1,0 +1,8 @@
+---
+- name: Include pfsense vars
+  include_vars: pfsense_vars.yml
+  tags: ["pfsense"]
+
+- name: Deploy pfsense OVF
+  command: "{{ pfsense_ovftool_path }} --acceptAllEulas --noSSLVerify --name={{ pfsense_vm_name }} --X:logFile=ovftool.log -dm={{ pfsense_provision_mode }} -ds={{ default_datastore }} --powerOn {{ pfsense_ovf_path }} \"vi://{{ esx_user }}:{{ esx_password }}@{{ esx_address }}\""
+  tags: ["pfsense"]

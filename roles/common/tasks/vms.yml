@@ -15,7 +15,7 @@
 - name: stat file to check it is not zero
   shell: wc -c /tmp/vms.csv  | awk '{print $1}'
   register: stvm
-  tags: ["vmfs"]
+  tags: ["vms"]
 
 - name: Read CSV
   read_csv:
@@ -32,63 +32,6 @@
   tags: ["pre_vms", "vms"]
 
 - name: Include pfsense vars
-  include_vars: pfsense_vars.yml
+  include_tasks: pfsense.yml
+  when: vms not defined
   tags: ["pfsense", "vms"]
-
-- name: Deploy pfsense OVF
-  command: "{{ pfsense_ovftool_path }} --acceptAllEulas --noSSLVerify --name={{ pfsense_vm_name }} --X:logFile=ovftool.log -dm={{ pfsense_provision_mode }} -ds={{ default_datastore }} --powerOn {{ pfsense_ovf_path }} \"vi://{{ esx_user }}:{{ esx_password }}@{{ esx_address }}\""
-  when: vms not defined or pfsense_vm_name not in vms.dict
-  tags: ["pfsense", "vms"]
-
-#- name: Enable autostart
-#- name: Deploy VCSA
-#- name: template VCSA JSON
-- name: debug variable issues
-  debug:
-    var: esx_password
-  tags: ["vms"]
-
-- name: Include vcsa vars
-  include_vars: vcsa_vars.yml
-  tags: ["vcsa_deploy", "vms"]
-
-- name: deploy VCSA
-  shell: govc import.ova -options=vcsa3.json /mnt/usb/vcsa_iso/vcsa/VMware-vCenter-Server-Appliance-6.7.0.40000-14367737_OVF10.ova 
-  environment:
-    GOPATH: "{{ go_path }}"
-    PATH: "{{ go_bin }}"
-    GOVC_INSECURE: 1
-    GOVC_URL: "{{ esx_address }}"
-    GOVC_USERNAME: "{{ esx_user }}"
-    GOVC_PASSWORD: "{{ esx_password }}"
-    GOVC_DATASTORE: "{{ default_datastore }}"
-    GOVC_NETWORK: "{{ default_portgroup }}"
-    GOVC_RESOURCE_POOL: "*/Resources"
-  async: 3600
-  poll: 5
-  delegate_to: localhost
-  when:  vms not defined or vcsa_vm_name not in vms.dict
-  tags: ["vcsa_deploy", "vms"]
-
-- name: Wait for ping  to VCSA
-  command: /bin/ping -c 1 {{ vcsa_ip_addr }}
-  register: result
-  retries: 150
-  delay: 10
-  until: result is not failed
-  delegate_to: localhost
-  tags: ["vcsa_deploy", "vms"]
-
-- name: Pause play until a URL is reachable from this host
-  uri:
-    url: "http://{{ vcsa_ip_addr }}/ui"
-    follow_redirects: all
-    method: GET
-    validate_certs: no
-  register: _result
-  until: _result.status == 200
-  retries: 720 # 720 * 5 seconds = 1hour (60*60/5)
-  delay: 5 # Every 5 seconds
-  delegate_to: localhost
-  tags: ["vcsa_deploy", "vms"]
-  
