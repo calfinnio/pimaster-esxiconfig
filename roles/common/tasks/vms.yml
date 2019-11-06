@@ -12,11 +12,17 @@
   shell: esxcli --formatter=csv vm process list > /tmp/vms.csv
   tags: ["pre_vms", "vms"]
 
+- name: stat file to check it is not zero
+  shell: wc -c /tmp/vmfsextents.csv  | awk '{print $1}'
+  register: stvm
+  tags: ["vmfs"]
+
 - name: Read CSV
   read_csv:
     path: /tmp/vms.csv
     key: DisplayName
   register: vms
+  when: stvm.stdout != "0"
   tags: ["pre_vms", "vms"]
 
 - name: Debug to show VMs
@@ -30,8 +36,8 @@
   tags: ["pfsense", "vms"]
 
 - name: Deploy pfsense OVF
-  command: "{{ pfsense_ovftool_path }} --acceptAllEulas --noSSLVerify --name={{ pfsense_vm_name }} --X:logFile=ovftool.log -dm={{ pfsense_provision_mode }} -ds={{ default_datastore }} {{ pfsense_ovf_path }} \"vi://{{ esx_user }}:{{ esx_password }}@{{ esx_address }}\""
-  when: pfsense_vm_name not in vms.dict
+  command: "{{ pfsense_ovftool_path }} --acceptAllEulas --noSSLVerify --name={{ pfsense_vm_name }} --X:logFile=ovftool.log -dm={{ pfsense_provision_mode }} -ds={{ default_datastore }} --powerOn {{ pfsense_ovf_path }} \"vi://{{ esx_user }}:{{ esx_password }}@{{ esx_address }}\""
+  when: vms not defined or pfsense_vm_name not in vms.dict
   tags: ["pfsense", "vms"]
 
 #- name: Enable autostart
@@ -61,7 +67,7 @@
   async: 3600
   poll: 5
   delegate_to: localhost
-  when: vcsa_vm_name not in vms.dict
+  when:  vms not defined or vcsa_vm_name not in vms.dict
   tags: ["vcsa_deploy", "vms"]
 
 - name: Wait for ping  to VCSA
