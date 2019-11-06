@@ -15,7 +15,7 @@
   tags: ["vms"]
   
 - name: deploy VCSA
-  shell: govc vm.create {{ guid }}
+  shell: govc vm.create {{ guid.stdout }}
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
