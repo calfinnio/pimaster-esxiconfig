@@ -55,6 +55,7 @@
 - name: debug of wc -c command
   debug:
     var: st
+    verbosity: 2
   tags: ["vmfs"]
 
 - name: Read CSV
@@ -62,19 +63,19 @@
     path: /tmp/vmfsextents.csv
     key: DeviceName
   register: vmfs_extents
-  when: st.stdout != 0
+  when: st.stdout != "0"
   tags: ["vmfs"]
 
 - name: debug here if no extents
   debug:
     msg: "No VMFS extents - creating one..."
     verbosity: 2
-  when: st.stdout == 0
+  when: st.stdout == "0"
   tags: ["vmfs"]
 
 - name: Include a create VMFS when no extents
   include: "{{ role_path }}/tasks/vmfs.yml"
-  when: st.stdout == 0
+  when: st.stdout == "0"
   tags: ["vmfs"]
 
 #Recheck VMFS extents
