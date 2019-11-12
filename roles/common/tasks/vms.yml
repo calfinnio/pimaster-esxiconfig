@@ -84,7 +84,12 @@
   debug:
     msg: "{{ hostvars }}"
   tags: ["vcsa_template"]
-  
+
+- name: debug vcsa vars
+  debug:
+    msg: "{{ vcsa_vm_name }}"
+  tags: ["vcsa_template"]
+
 - name: Generate VCSA json for deployment
   template:
     src: vcsa.json.j2
