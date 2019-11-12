@@ -78,18 +78,11 @@
 
 - name: Include vcsa vars
   include_vars: vcsa_vars.yml
-  tags: ["vcsa_deploy"]
-
-- name: debug hostvars
-  debug:
-    msg: "{{ hostvars }}"
-    verbosity: 3
-  tags: ["vcsa_template"]
+  tags: ["vcsa_deploy", "vcsa_template"]
 
 - name: debug vcsa vars
   debug:
-    var: "{{ vcsa_vm_name }}"
-  delegate_to: localhost
+    msg: "{{ vcsa_vm_name }}"
   tags: ["vcsa_template"]
 
 - name: Generate VCSA json for deployment
