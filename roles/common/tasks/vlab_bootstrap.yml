@@ -1,9 +1,14 @@
 ---
+- name: Include secrets
+  include_vars: 
+    file: secrets_physical_esx.yml
+  tags: ["vlab-bootstrap"]
+
 - name: Include vcsa connection vars
   include_vars: vcsa_vars.yml
   tags: ["vlab-bootstrap"]
 
-- environment:
+  environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
     GOVC_INSECURE: 1
@@ -13,7 +18,6 @@
     GOVC_DATASTORE: "{{ default_datastore }}"
     GOVC_NETWORK: "{{ default_portgroup }}"
     GOVC_RESOURCE_POOL: "*/Resources"
-  tags: ["vlab-bootstrap"]
 
 - name: Create initial datacenter
   shell: govc datacenter.create HomeLab 
