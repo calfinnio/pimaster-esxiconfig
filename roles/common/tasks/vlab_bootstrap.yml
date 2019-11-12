@@ -18,10 +18,8 @@
         GOVC_URL: "{{ vcsa_dns_name }}"
         GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
         GOVC_PASSWORD: "{{ esx_password }}"
-        GOVC_DATASTORE: "{{ default_datastore }}"
-        GOVC_NETWORK: "{{ default_portgroup }}"
         GOVC_RESOURCE_POOL: "*/Resources"
-      register: dc_result
+      register: dc_results
       delegate_to: localhost
       tags: ["vlab-bootstrap"]
 
