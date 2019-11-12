@@ -2,7 +2,7 @@
 - name: Include secrets
   include_vars: 
     file: secrets_physical_esx.yml
-  tags: ["vms"]
+  tags: ["vms","vcsa_template"]
 
 - name: import vars for nfs
   include_vars: nfs-vars.yml
