@@ -9,23 +9,22 @@
   tags: ["vlab-bootstrap"]
 
 - name: Check env for previous runs
-  block:
-    - shell: govc datacenter.info -json=true 
-      environment:
-        GOPATH: "{{ go_path }}"
-        PATH: "{{ go_bin }}"
-        GOVC_INSECURE: 1
-        GOVC_URL: "{{ vcsa_dns_name }}"
-        GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
-        GOVC_PASSWORD: "{{ esx_password }}"
-        GOVC_RESOURCE_POOL: "*/Resources"
-      register: dc_results
-      delegate_to: localhost
-      tags: ["vlab-bootstrap"]
+  shell: govc datacenter.info -json=true
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  register: dc_results
+  delegate_to: localhost
+  tags: ["vlab-bootstrap"]
 
 - name: Debug dc info
   debug:
-    msg: "{{ dc_results.Datacenters.Name }}"
+    msg: "{{ dc_results.dict.Datacenters.Name }}"
   tags: ["vlab-bootstrap"]
 #- name: Create initial datacenter
 #  block:
