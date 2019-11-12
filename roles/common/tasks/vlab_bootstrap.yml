@@ -8,6 +8,8 @@
   include_vars: vcsa_vars.yml
   tags: ["vlab-bootstrap"]
 
+- name: Create initial datacenter
+  shell: govc datacenter.create HomeLab 
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
@@ -18,9 +20,6 @@
     GOVC_DATASTORE: "{{ default_datastore }}"
     GOVC_NETWORK: "{{ default_portgroup }}"
     GOVC_RESOURCE_POOL: "*/Resources"
-
-- name: Create initial datacenter
-  shell: govc datacenter.create HomeLab 
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
