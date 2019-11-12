@@ -6,6 +6,7 @@ vcsa_ip_prefix: 24
 vcsa_gateway: 10.64.0.1
 vcsa_dns: 10.64.0.1
 vcsa_dns_name: vcsa.houseofbears.co.uk
+vcsa_dns_domain: houseofbears.co.uk
 vcsa_username: administrator
 vcsa_sso_domain: vsphere.local
 vcsa_site_name: Site01
