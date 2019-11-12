@@ -8,22 +8,45 @@
   include_vars: vcsa_vars.yml
   tags: ["vlab-bootstrap"]
 
-- name: Create initial datacenter
-  shell: govc datacenter.create HomeLab 
-  environment:
-    GOPATH: "{{ go_path }}"
-    PATH: "{{ go_bin }}"
-    GOVC_INSECURE: 1
-    GOVC_URL: "{{ vcsa_dns_name }}"
-    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
-    GOVC_PASSWORD: "{{ esx_password }}"
-    GOVC_DATASTORE: "{{ default_datastore }}"
-    GOVC_NETWORK: "{{ default_portgroup }}"
-    GOVC_RESOURCE_POOL: "*/Resources"
-  delegate_to: localhost
+- name: Check env for previous runs
+  block:
+    - shell: govc datacenter.info -json=true 
+      environment:
+        GOPATH: "{{ go_path }}"
+        PATH: "{{ go_bin }}"
+        GOVC_INSECURE: 1
+        GOVC_URL: "{{ vcsa_dns_name }}"
+        GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+        GOVC_PASSWORD: "{{ esx_password }}"
+        GOVC_DATASTORE: "{{ default_datastore }}"
+        GOVC_NETWORK: "{{ default_portgroup }}"
+        GOVC_RESOURCE_POOL: "*/Resources"
+      register: dc_result
+      delegate_to: localhost
+      tags: ["vlab-bootstrap"]
+
+- name: Debug dc info
+  debug:
+    msg: "{{ dc_results.Name }}"
   tags: ["vlab-bootstrap"]
-
-
+#- name: Create initial datacenter
+#  block:
+#  shell: govc datacenter.create HomeLab 
+#  environment:
+#    GOPATH: "{{ go_path }}"
+#    PATH: "{{ go_bin }}"
+#    GOVC_INSECURE: 1
+#    GOVC_URL: "{{ vcsa_dns_name }}"
+#    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+#    GOVC_PASSWORD: "{{ esx_password }}"
+#    GOVC_DATASTORE: "{{ default_datastore }}"
+#    GOVC_NETWORK: "{{ default_portgroup }}"
+#    GOVC_RESOURCE_POOL: "*/Resources"
+#  register
+#  delegate_to: localhost
+#  tags: ["vlab-bootstrap"]
+##
+#
 #govc host.add -hostname=esx1.houseofbears.co.uk -password=VMware1! -username=root -noverify=true
 #
 #echo | openssl s_client -showcerts -servername download3.vmware.com -connect download3.vmware.com:443 2>/dev/null | openssl x509 -fingerprint -noout -sha1 | awk '{print substr($0,index($0,"=")+1)}'
