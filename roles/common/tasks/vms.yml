@@ -52,6 +52,21 @@
     verbosity: 2
   tags: ["pre_vms", "vms"]
 
+- name: Remove dummy vm (END Hacky fix)
+  shell: govc vm.destroy {{ guid.stdout }}
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ esx_address }}"
+    GOVC_USERNAME: "{{ esx_user }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_DATASTORE: "{{ default_datastore }}"
+    GOVC_NETWORK: "{{ default_portgroup }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  delegate_to: localhost
+  tags: ["vms"]
+
 - name: Include pfsense vars
   include_vars: pfsense_vars.yml
   tags: ["pfsense"]
@@ -83,7 +98,7 @@
   delegate_to: localhost
   tags: ["vcsa_deploy"]
 
-- name: Wait for ping  to VCSA
+- name: Wait for ping to VCSA
   command: /bin/ping -c 1 {{ vcsa_ip_addr }}
   register: result
   retries: 150
@@ -92,7 +107,7 @@
   delegate_to: localhost
   tags: ["vcsa_deploy"]
 
-- name: Pause play until a URL is reachable from this host
+- name: Pause play until vcsa/ui URL is reachable from this host
   uri:
     url: "http://{{ vcsa_ip_addr }}/ui"
     follow_redirects: all
@@ -104,9 +119,9 @@
   delay: 5 # Every 5 seconds
   delegate_to: localhost
   tags: ["vcsa_deploy"]
-  
-- name: Remove dummy vm (END Hacky fix)
-  shell: govc vm.destroy {{ guid.stdout }}
+
+- name: Add pfsense to autostart
+  shell: govc host.autostart.add -start-delay=60 -start-order=1 {{ pfsense_vm_name }}
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
@@ -118,7 +133,37 @@
     GOVC_NETWORK: "{{ default_portgroup }}"
     GOVC_RESOURCE_POOL: "*/Resources"
   delegate_to: localhost
-  tags: ["vms"]
+  tags: ["vms", "autostart"]
+
+- name: add vcsa to 
+  shell: govc host.autostart.add -start-delay=120 -start-order=2 {{ vcsa_vm_name }}
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ esx_address }}"
+    GOVC_USERNAME: "{{ esx_user }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_DATASTORE: "{{ default_datastore }}"
+    GOVC_NETWORK: "{{ default_portgroup }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  delegate_to: localhost
+  tags: ["vms", "autostart"]
+
+- name: Enabled Autostart
+  shell: govc host.autostart.configure -enabled=true
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ esx_address }}"
+    GOVC_USERNAME: "{{ esx_user }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_DATASTORE: "{{ default_datastore }}"
+    GOVC_NETWORK: "{{ default_portgroup }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  delegate_to: localhost
+  tags: ["vms", "autostart"]
 #- name: Include pfsense VM tasks
 #  include_tasks: pfsense.yml
 #  when: stvm.stdout == "0"
