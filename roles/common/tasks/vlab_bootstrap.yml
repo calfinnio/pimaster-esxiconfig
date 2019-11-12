@@ -13,6 +13,7 @@
     GOVC_DATASTORE: "{{ default_datastore }}"
     GOVC_NETWORK: "{{ default_portgroup }}"
     GOVC_RESOURCE_POOL: "*/Resources"
+  tags: ["vlab-bootstrap"]
 
 - name: Create initial datacenter
   shell: govc datacenter.create HomeLab 
