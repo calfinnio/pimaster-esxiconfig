@@ -83,17 +83,20 @@
 - name: debug hostvars
   debug:
     msg: "{{ hostvars }}"
+    verbosity: 3
   tags: ["vcsa_template"]
 
 - name: debug vcsa vars
   debug:
     msg: "{{ vcsa_vm_name }}"
+  delegate_to: localhost
   tags: ["vcsa_template"]
 
 - name: Generate VCSA json for deployment
   template:
     src: vcsa.json.j2
     dest: "{{ role_path }}/files/vcsa.json"
+  delegate_to: localhost
   tags: [ 'vcsa_template']
 
 - name: deploy VCSA
