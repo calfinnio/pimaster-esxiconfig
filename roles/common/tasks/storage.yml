@@ -74,8 +74,7 @@
   tags: ["vmfs"]
 
 - name: Include a create VMFS when no extents
-  include: "{{ role_path }}/tasks/vmfs.yml"
-  static: no
+  include_tasks: "{{ role_path }}/tasks/vmfs.yml"
   when: st.stdout == "0"
   tags: ["vmfs"]
 
