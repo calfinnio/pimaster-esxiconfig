@@ -80,6 +80,11 @@
   include_vars: vcsa_vars.yml
   tags: ["vcsa_deploy"]
 
+- name: debug hostvars
+  debug:
+    msg: "{{ hostvars }}"
+  tags: ["vcsa_template"]
+  
 - name: Generate VCSA json for deployment
   template:
     src: vcsa.json.j2
