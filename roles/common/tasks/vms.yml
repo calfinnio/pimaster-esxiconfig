@@ -80,8 +80,14 @@
   include_vars: vcsa_vars.yml
   tags: ["vcsa_deploy"]
 
+- name: Generate VCSA json for deployment
+  template:
+    src: vcsa.json.j2
+    dest: "{{ role_path }}/files/vcsa.json"
+  tags: [ 'vcsa_template']
+
 - name: deploy VCSA
-  shell: govc import.ova -options=vcsa3.json /mnt/usb/vcsa_iso/vcsa/VMware-vCenter-Server-Appliance-6.7.0.40000-14367737_OVF10.ova 
+  shell: govc import.ova -options="{{ role_path }}/files/vcsa.json" /mnt/usb/vcsa_iso/vcsa/VMware-vCenter-Server-Appliance-6.7.0.40000-14367737_OVF10.ova 
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
