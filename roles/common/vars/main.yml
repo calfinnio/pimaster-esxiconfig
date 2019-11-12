@@ -4,16 +4,6 @@ network_vars:
     portgroup_name: pg_LabMgmt
     default: True
 
-datastore_vars:
-  General1:
-   Path:
-  General2:
-   Path:
-  SSD1:
-   Path:
-  SSD2:
-   Path:
-   
 pfsense_vars:
  - vm_name: pfsense_test
    wan_pg: "VM Network"
