@@ -3,3 +3,4 @@
 - include: networking.yml
 - include: storage.yml
 - include: vms.yml
+- include: vlab_bootstrap.yml
