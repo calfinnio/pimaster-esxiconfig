@@ -1,0 +1,97 @@
+{
+    "Annotation": "VMware vCenter Server Appliance",
+    "Deployment": "tiny",
+    "DiskProvisioning": "thin",
+    "IPAllocationPolicy": "dhcpPolicy",
+    "IPProtocol": "IPv4",
+    "InjectOvfEnv": true,
+    "MarkAsTemplate": false,
+    "Name": {{ vcsa_vm_name }},
+    "NetworkMapping": [
+        {
+            "Name": "Network 1",
+            "Network": {{ vcsa_network }}
+        }
+    ],
+    "PowerOn": true,
+    "PropertyMapping": [
+        {
+            "Key": "guestinfo.cis.appliance.net.addr.family",
+            "Value": "ipv4"
+        },
+        {
+            "Key": "guestinfo.cis.appliance.net.mode",
+            "Value": "static"
+        },
+        {
+            "Key": "guestinfo.cis.appliance.net.addr",
+            "Value": {{ vcsa_ip_addr }}
+        },
+        {
+            "Key": "guestinfo.cis.appliance.net.prefix",
+            "Value": {{ vcsa_ip_prefix }}
+        },
+        {
+            "Key": "guestinfo.cis.appliance.net.gateway",
+            "Value": {{ vcsa_gateway }}
+        },
+        {
+            "Key": "guestinfo.cis.appliance.net.dns.servers",
+            "Value": {{ hostvars.masternodes.ansible_host }}
+        },
+        {
+            "Key": "guestinfo.cis.appliance.net.pnid",
+            "Value": {{ vcsa_dns_name }}
+        },
+        {
+            "Key": "guestinfo.cis.vmdir.password",
+            "Value": {{ esx_password }}
+        },
+        {
+            "Key": "guestinfo.cis.appliance.root.passwd",
+            "Value": {{ esx_password }}
+        },
+        {
+            "Key": "guestinfo.cis.deployment.node.type",
+            "Value": "embedded"
+        },
+        {
+            "Key": "guestinfo.cis.vmdir.domain-name",
+            "Value": {{ vcsa_sso_domain }}
+        },
+        {
+            "Key": "guestinfo.cis.deployment.autoconfig",
+            "Value": "True"
+        },
+        {
+            "Key": "guestinfo.cis.vmdir.site-name",
+            "Value": {{ vcsa_site_name }}
+        },
+        {
+            "Key": "guestinfo.cis.ceip_enabled",
+            "Value": "True"
+        },
+        {
+            "Key": "guestinfo.cis.appliance.root.shell",
+            "Value": "/bin/bash"
+        },
+        {
+            "Key": "guestinfo.cis.appliance.ssh.enabled",
+            "Value": "True"
+        },
+        {
+            "Key": "guestinfo.cis.appliance.ntp.servers",
+            "Value": {{ vcsa_gateway }}
+        },
+        {
+            "Key": "vami.domain.VMware-vCenter-Server-Appliance",
+            "Value": "{{ vcsa_dns_domain }}"
+        },
+        {
+            "Key": "vami.searchpath.VMware-vCenter-Server-Appliance",
+            "Value": "{{ vcsa_dns_domain }}"
+        }
+    ],
+    "WaitForIP": false
+}
+
