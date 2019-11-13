@@ -24,7 +24,7 @@
 
 - name: convert list to var
   set_fact:
-    dcresult: "{{ dc_results.stdout }}"
+    dcresult: "{{ dc_results.stdout | split('\n') }}"
   tags: ['vlab-bootstrap']
 
 - name: debug of govc json return
@@ -57,7 +57,6 @@
     GOVC_DATASTORE: "{{ default_datastore }}"
     GOVC_NETWORK: "{{ default_portgroup }}"
     GOVC_RESOURCE_POOL: "*/Resources"
-  loop: "{{ q('dict', dcresult.dict) }}"
   when:
     - dcresult|length == 0
     - vcsa_dc_name not in dcresult
