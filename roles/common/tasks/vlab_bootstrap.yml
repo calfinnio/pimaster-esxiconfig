@@ -39,6 +39,12 @@
     verbosity: 2
   tags: ['vlab-bootstrap']
 
+- name: Debug variable dcresult
+  debug:
+    var:  dcresult
+    verbosity: 2
+  tags: ['vlab-bootstrap']
+
 - name: Create initial datacenter
   shell: govc datacenter.create {{ vcsa_dc_name }} 
   environment:
