@@ -58,6 +58,25 @@
   when: dcresult|length == 0 or vcsa_dc_name not in dcresult
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
+
+- name: Simple PTR record (IPV4 address) lookup for esx_address
+  debug: 
+    msg: "{{ lookup('dig', {{ esx_address }})}}"
+  tags: ["vlab-bootstrap"]
+
+- name: Add physical host to datacenter
+  shell: govc host.add -hostname=esx1.houseofbears.co.uk -password={{ esx_password }} -username={{ esx_username }} -noverify=true
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  when: dcresult|length == 0 or vcsa_dc_name not in dcresult
+  delegate_to: localhost
+  tags: ["vlab-bootstrap"]
 #
 #
 #govc host.add -hostname=esx1.houseofbears.co.uk -password=VMware1! -username=root -noverify=true
