@@ -24,7 +24,7 @@
 
 - name: convert list to var
   set_fact:
-    dcresult: "{{ dc_results.stdout | split('\n') }}"
+    dcresult: "{{ dc_results.stdout.split('\n') }}"
   tags: ['vlab-bootstrap']
 
 - name: debug of govc json return
