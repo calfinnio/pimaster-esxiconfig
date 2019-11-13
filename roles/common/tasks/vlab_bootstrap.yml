@@ -22,38 +22,42 @@
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
-- name: Debug dc info
-  debug:
-    msg: "{{ dc_results }}"
-    verbosity: 2
-  tags: ["vlab-bootstrap"]
-
 - name: convert list to var
   set_fact:
-    dcresult: "{{ dc_results.stdout_lines }}"
+    dcresult: "{{ dc_results.stdout | from_json }}"
   tags: ['vlab-bootstrap']
 
 - name: debug of govc json return
   debug:
-    msg: "{{ dcresult }}"
+    msg: "{{ dcresult.Datacenters[0].Name }}"
+    verbosity: 2
   tags: ['vlab-bootstrap']
-#- name: Create initial datacenter
-#  block:
-#  shell: govc datacenter.create HomeLab 
-#  environment:
-#    GOPATH: "{{ go_path }}"
-#    PATH: "{{ go_bin }}"
-#    GOVC_INSECURE: 1
-#    GOVC_URL: "{{ vcsa_dns_name }}"
-#    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
-#    GOVC_PASSWORD: "{{ esx_password }}"
-#    GOVC_DATASTORE: "{{ default_datastore }}"
-#    GOVC_NETWORK: "{{ default_portgroup }}"
-#    GOVC_RESOURCE_POOL: "*/Resources"
-#  register
-#  delegate_to: localhost
-#  tags: ["vlab-bootstrap"]
-##
+
+- name: Debug number of elements
+  debug:
+    msg: "{{ dcresult|length }}"
+    verbosity: 2
+  tags: ['vlab-bootstrap']
+
+- name: Create initial datacenter
+  shell: govc datacenter.create {{ vcsa_dc_name }} 
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_DATASTORE: "{{ default_datastore }}"
+    GOVC_NETWORK: "{{ default_portgroup }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  loop: "{{ q('dict', dcresult.dict) }}"
+  when:
+    - dcresult|length == 0
+    #- vcsa_dc_name not in dcresult.Datacenters
+  delegate_to: localhost
+  tags: ["vlab-bootstrap"]
+#
 #
 #govc host.add -hostname=esx1.houseofbears.co.uk -password=VMware1! -username=root -noverify=true
 #
