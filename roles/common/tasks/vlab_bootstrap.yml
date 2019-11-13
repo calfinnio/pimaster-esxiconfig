@@ -24,8 +24,19 @@
 
 - name: Debug dc info
   debug:
-    msg: "{{ dc_results.dict.Datacenters.Name }}"
+    msg: "{{ dc_results }}"
+    verbosity: 2
   tags: ["vlab-bootstrap"]
+
+- name: convert list to var
+  set_fact:
+    dcresult: "{{ dc_results.stdout_lines }}"
+  tags: ['vlab-bootstrap']
+
+- name: debug of govc json return
+  debug:
+    msg: "{{ dcresult }}"
+  tags: ['vlab-bootstrap']
 #- name: Create initial datacenter
 #  block:
 #  shell: govc datacenter.create HomeLab 
