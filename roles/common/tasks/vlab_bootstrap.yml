@@ -9,7 +9,7 @@
   tags: ["vlab-bootstrap"]
 
 - name: Check env for previous runs
-  shell: govc datacenter.info -json=true
+  shell: govc datacenter.info -json | jq .Datacenters[].Name
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
@@ -24,12 +24,12 @@
 
 - name: convert list to var
   set_fact:
-    dcresult: "{{ dc_results.stdout | from_json }}"
+    dcresult: "{{ dc_results.stdout }}"
   tags: ['vlab-bootstrap']
 
 - name: debug of govc json return
   debug:
-    msg: "{{ dcresult.Datacenters[0].Name }}"
+    msg: "{{ dcresult }}"
     verbosity: 2
   tags: ['vlab-bootstrap']
 
@@ -60,7 +60,7 @@
   loop: "{{ q('dict', dcresult.dict) }}"
   when:
     - dcresult|length == 0
-    #- vcsa_dc_name not in dcresult.Datacenters
+    - vcsa_dc_name not in dcresult
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 #
