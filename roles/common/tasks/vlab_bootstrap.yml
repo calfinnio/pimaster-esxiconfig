@@ -9,7 +9,7 @@
   tags: ["vlab-bootstrap"]
 
 - name: Check env for previous runs
-  shell: govc datacenter.info -json | jq .Datacenters[].Name
+  shell: govc datacenter.info -json | /usr/bin/jq .Datacenters[].Name
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
