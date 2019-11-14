@@ -85,7 +85,7 @@
 
 - name: Debug variable
   debug:
-    var: hostresults
+    var: hostresult
   tags: ['vlan-bootstrap']
 
 - name: Add physical host to datacenter
