@@ -119,7 +119,7 @@
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
   register: host_results
-  loop: host_names
+  loop: hostnames
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
