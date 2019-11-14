@@ -123,6 +123,11 @@
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
+- name: Debug variable ip_results
+  debug:
+    var: host_results.results
+    verbosity: 2
+  tags: ['vlab-bootstrap']
 
 - name: Change results to dict
   set_fact:
