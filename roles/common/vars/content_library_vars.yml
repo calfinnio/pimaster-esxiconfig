@@ -1,0 +1,11 @@
+---
+subscription_url: https://download3.vmware.com/software/vmw-tools/lib.json
+content_library_name: vGhettoLib
+
+#govc library.create 
+#-sub= 
+#-ds=General1 
+#-dc=HomeLab 
+#-ssl-thumbprint=56:53:D1:6F:CE:B9:C1:C9:25:D5:7F:41:11:DF:7B:00:2C:97:BF:95 
+#vGhettoLib
+#

@@ -8,6 +8,10 @@
   include_vars: vcsa_vars.yml
   tags: ["vlab-bootstrap"]
 
+- name: Include content library vars
+  include_vars: content_library_vars.yml
+  tags: ["vlab-bootstrap"]
+
 - name: Check env for previous runs
   shell: govc datacenter.info -json | /usr/bin/jq -r .Datacenters[].Name
   environment:
@@ -154,9 +158,33 @@
   when: hostvars.esx1.ansible_host not in ip_results or host_count == 0
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
-#
-#
-#govc host.add -hostname=esx1.houseofbears.co.uk -password=VMware1! -username=root -noverify=true
+
+- name: Get Content Library SSL SHA1 Thumbprint
+  shell: /usr/bin/echo | /usr/bin/openssl s_client -showcerts -servername download3.vmware.com -connect download3.vmware.com:443 2>/dev/null | /usr/bin/openssl x509 -fingerprint -noout -sha1 | /usr/bin/awk '{print substr($0,index($0,"=")+1)}'
+  delegate_to: localhost
+  register: ssl_thumprint
+  tags: ["vlab-bootstrap"]
+
+- name: Debug getting SSL Thumbprint
+  debug:
+    var: ssl_thumbprint
+    verbosity: 2
+  tags: ["vlab-bootstrap"]
+
+- name: deploy content library
+  shell: govc library.create -sub={{ subscription_url }} -ds=General1 -dc={{ vcsa_dc_name }} -sub-ondemand -thumbprint={{ ssl_thumbprint }} {{ content_library_name }}
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_DATASTORE: "{{ default_datastore }}"
+    GOVC_NETWORK: "{{ default_portgroup }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  delegate_to: localhost
+  tags: ["vlab-bootstrap"]
 #
 #echo | openssl s_client -showcerts -servername download3.vmware.com -connect download3.vmware.com:443 2>/dev/null | openssl x509 -fingerprint -noout -sha1 | awk '{print substr($0,index($0,"=")+1)}'
 #
