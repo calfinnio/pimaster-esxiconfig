@@ -97,6 +97,11 @@
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
+- name: Convert Host list to var
+  set_fact:
+    hostnames: "{{ host_names.stdout }}"
+  tags: ['vlab-bootstrap']
+
 - name: Get Host IPs
   shell: govc host.info -dc={{ vcsa_dc_name }} -host={{ item }} -json | /usr/bin/jq -r .HostSystems[].Config.Network.Vnic[].Spec.Ip.IpAddress
   environment:
