@@ -123,9 +123,15 @@
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
+- name: Debug variable
+  debug:
+    var: host_result
+    verbosity: 2
+  tags: ['vlab-bootstrap']
+
 - name: Convert Host list to var
   set_fact:
-    hostresult: "{{ host_results.stdout }}"
+    hostresult: "{{ host_results.dict }}"
   tags: ['vlab-bootstrap']
 
 - name: Debug variable
