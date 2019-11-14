@@ -65,7 +65,7 @@
 #  tags: ["vlab-bootstrap"]
 
 - name: Get Host IPs
-  shell: govc host.info -json | /usr/bin/jq -r .HostSystems[].Config.Network.Vnic[].Spec.Ip.IpAddress
+  shell: govc host.info -dc={{ vcsa_dc_name }} -json | /usr/bin/jq -r .HostSystems[].Config.Network.Vnic[].Spec.Ip.IpAddress
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
