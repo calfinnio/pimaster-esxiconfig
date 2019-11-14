@@ -123,9 +123,9 @@
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
-- name: Debug variable
+- name: Debug variable host_results
   debug:
-    var: host_result
+    var: host_results.results
     verbosity: 2
   tags: ['vlab-bootstrap']
 
