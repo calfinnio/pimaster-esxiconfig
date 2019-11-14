@@ -89,7 +89,7 @@
   tags: ['vlab-bootstrap']
 
 - name: Add physical host to datacenter
-  shell: govc host.add -hostname={{ hostvars.esx1.ansible_host }} -password={{ esx_password }} -username={{ esx_username }} -noverify=true
+  shell: govc host.add -hostname={{ hostvars.esx1.ansible_host }} -password={{ esx_password }} -username={{ esx_user }} -noverify=true
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
