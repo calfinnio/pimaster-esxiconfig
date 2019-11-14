@@ -99,7 +99,13 @@
 
 - name: Convert Host list to var
   set_fact:
-    hostnames: "{{ host_names.stdout }}"
+    hostnames: "{{ host_names.stdout.split('\n') }}"
+  tags: ['vlab-bootstrap']
+
+- name: debug hostanmes variable
+  debug:
+    var: hostnames
+    verbosity: 2
   tags: ['vlab-bootstrap']
 
 - name: Get Host IPs
