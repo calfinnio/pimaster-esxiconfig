@@ -129,6 +129,11 @@
     verbosity: 2
   tags: ['vlab-bootstrap']
 
+- name: Change results to dict
+  set_fact:
+    ip_results: "{{ ip_results|default({}) | combine( {item.item.name: item.stdout} ) }}"
+  with_items: "{{ host_results.results }}"
+
 - name: Add physical host to datacenter
   shell: govc host.add -hostname={{ hostvars.esx1.ansible_host }} -password={{ esx_password }} -username={{ esx_user }} -dc={{ vcsa_dc_name }} -noverify=true
   environment:
@@ -139,7 +144,7 @@
     GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
-  when: hostvars.esx1.ansible_host not in host_result.results or hostcount == 0
+  when: hostvars.esx1.ansible_host not in ip_results or hostcount == 0
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 #
