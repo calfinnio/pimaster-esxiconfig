@@ -123,16 +123,18 @@
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
-- name: Debug variable host_results
-  debug:
-    var: host_results.results.stdout
-    verbosity: 2
-  tags: ['vlab-bootstrap']
 
 - name: Change results to dict
   set_fact:
     ip_results: "{{ ip_results|default({}) | combine( {item.item.name: item.stdout} ) }}"
   with_items: "{{ host_results.results }}"
+  tags: ['vlab-bootstrap']
+
+- name: Debug variable ip_results
+  debug:
+    var: ip_results
+    verbosity: 2
+  tags: ['vlab-bootstrap']
 
 - name: Add physical host to datacenter
   shell: govc host.add -hostname={{ hostvars.esx1.ansible_host }} -password={{ esx_password }} -username={{ esx_user }} -dc={{ vcsa_dc_name }} -noverify=true
