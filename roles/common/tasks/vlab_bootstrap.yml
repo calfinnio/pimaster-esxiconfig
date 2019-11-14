@@ -9,7 +9,7 @@
   tags: ["vlab-bootstrap"]
 
 - name: Check env for previous runs
-  shell: govc datacenter.info -json | /usr/bin/jq .Datacenters[].Name
+  shell: govc datacenter.info -json | /usr/bin/jq -r .Datacenters[].Name
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
@@ -24,7 +24,7 @@
 
 - name: convert list to var
   set_fact:
-    dcresult: "{{ dc_results.stdout.split('\n') }}"
+    dcresult: "{{ dc_results.stdout }}"
   tags: ['vlab-bootstrap']
 
 - name: debug of govc json return
@@ -59,13 +59,37 @@
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
-- name: Simple PTR record (IPV4 address) lookup for esx_address
-  debug: 
-    msg: "{{ lookup('dig', {{ esx_address }})}}"
+#- name: Simple PTR record (IPV4 address) lookup for esx_address
+#  debug: 
+#    msg: "{{ lookup('dig', esx_address )}}"
+#  tags: ["vlab-bootstrap"]
+
+- name: Get Host IPs
+  shell: govc host.info -json | /usr/bin/jq -r .HostSystems[].Config.Network.Vnic[].Spec.Ip.IpAddress
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  register: host_results
+  delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
+- name: Convert Host list to var
+  set_fact:
+    hostresult: "{{ host_results.stdout }}"
+  tags: ['vlab-bootstrap']
+
+- name: Debug variable
+  debug:
+    var: hostresults
+  tags: ['vlan-bootstrap']
+
 - name: Add physical host to datacenter
-  shell: govc host.add -hostname=esx1.houseofbears.co.uk -password={{ esx_password }} -username={{ esx_username }} -noverify=true
+  shell: govc host.add -hostname={{ hostvars.esx1.ansible_host }} -password={{ esx_password }} -username={{ esx_username }} -noverify=true
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
