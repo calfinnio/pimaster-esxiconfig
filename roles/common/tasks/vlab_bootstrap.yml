@@ -84,7 +84,7 @@
   tags: ["vlab-bootstrap"]
 
 - name: Get all hosts in DC
-  shell: govc ls /{{ vcsa_dc_name }}/host | awk -F"/" '{print $NF}'
+  shell: govc ls /{{ vcsa_dc_name }}/host | /usr/bin/awk -F"/" '{print $NF}'
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
