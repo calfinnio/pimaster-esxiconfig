@@ -139,8 +139,7 @@
     GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
-  when: hostvars.esx1.ansible_host not in hostresult or hostcount == 0
-  loop: "{{ query('host_results.results', 'stdout') }}"
+  when: hostvars.esx1.ansible_host not in host_result.results or hostcount == 0
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 #
