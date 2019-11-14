@@ -125,7 +125,7 @@
 
 - name: Debug variable host_results
   debug:
-    var: host_results.results
+    var: host_results.results.stdout
     verbosity: 2
   tags: ['vlab-bootstrap']
 
