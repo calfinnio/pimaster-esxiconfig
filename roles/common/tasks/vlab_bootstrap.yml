@@ -162,7 +162,7 @@
 - name: Get Content Library SSL SHA1 Thumbprint
   shell: /usr/bin/echo | /usr/bin/openssl s_client -showcerts -servername download3.vmware.com -connect download3.vmware.com:443 2>/dev/null | /usr/bin/openssl x509 -fingerprint -noout -sha1 | /usr/bin/awk '{print substr($0,index($0,"=")+1)}'
   delegate_to: localhost
-  register: ssl_thumprint
+  register: ssl_thumbprint
   tags: ["vlab-bootstrap"]
 
 - name: Debug getting SSL Thumbprint
