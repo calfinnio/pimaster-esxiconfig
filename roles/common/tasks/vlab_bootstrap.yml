@@ -63,6 +63,25 @@
 #  debug: 
 #    msg: "{{ lookup('dig', esx_address )}}"
 #  tags: ["vlab-bootstrap"]
+- name: Count hosts in DC
+  shell: govc ls /{{ vcsa_dc_name }}/host | /usr/bin/wc -l
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  register: host_count
+  delegate_to: localhost
+  tags: ["vlab-bootstrap"]
+
+- name: Debug host count
+  debug:
+    msg: "{{ host_count }}"
+    verbosity: 2
+  tags: ["vlab_bootstrap"]
 
 - name: Get Host IPs
   shell: govc host.info -dc={{ vcsa_dc_name }} -json | /usr/bin/jq -r .HostSystems[].Config.Network.Vnic[].Spec.Ip.IpAddress
