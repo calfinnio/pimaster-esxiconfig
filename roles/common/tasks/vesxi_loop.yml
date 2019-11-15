@@ -75,7 +75,7 @@
   tags: ["deploy_vesxi"]
 
 - name: Check powerstate of vesxi{{ outer_item }}
-  shell: govc vm.info -json vesxi{{ outer_item }} | /usr/bin/jq .VirtualMachines[].Runtime.PowerState
+  shell: govc vm.info -json vesxi{{ outer_item }} | /usr/bin/jq .VirtualMachines[].Runtime.PowerState | /bin/sed 's/["\]//g'
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
@@ -90,11 +90,14 @@
 
 - name: Debug vm powerstate
   debug:
-    var: "{{ vm_powerstate.stdout }}"
+    var: "{{ vm_powerstate }}"
     #verbosity: 2
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
+- name: Convert powerstate check to var
+  set_fact:
+    vm_poweredOn: "{{ vm_powerstate.stdout }}"
 - name: PowerOn  vesxi{{ outer_item }}
   shell: govc vm.power -on {{ vesxi_basename }}{{ ansible_loop.index}}
   environment:
