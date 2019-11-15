@@ -99,7 +99,7 @@
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
   delegate_to: localhost
-  when: vm_powerstate.stdout not "poweredOn"
+  when: vm_powerstate.stdout != "poweredOn"
   tags: ["deploy_vesxi"]
 #not in ip_results
 
