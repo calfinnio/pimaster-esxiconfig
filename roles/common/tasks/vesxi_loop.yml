@@ -35,13 +35,27 @@
 - name: Debug current_ip
   debug:
     msg: "{{ current_ip }}"
-    verbosity: 2
+    verbosity: 3
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
 - name: Debug ip_results
   debug:
     msg: "{{ ip_results }}"
+    verbosity: 3
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
+
+- name: Debug current_name
+  debug:
+    msg: "{{ current_name }}"
+    verbosity: 2
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
+
+- name: Debug current_vms
+  debug:
+    msg: "{{ current_vms }}"
     verbosity: 2
   delegate_to: localhost
   tags: ["deploy_vesxi"]
