@@ -1,4 +1,8 @@
 ---
+- name: Include vesxi vars
+  include_vars: vesxi_vars.yml
+  tags: ["deploy_vesxi"]
+  
 - name: deploy vesxi
   include_tasks: vesxi_loop.yml
   loop: "{{ vesxi_host_count }}"
