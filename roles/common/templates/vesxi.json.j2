@@ -17,7 +17,7 @@
     },
     {
       "Key": "guestinfo.gateway",
-      "Value": "10.64.0.1"
+      "Value": {{ vcsa_gateway }}
     },
     {
       "Key": "guestinfo.vlan",
@@ -25,15 +25,15 @@
     },
     {
       "Key": "guestinfo.dns",
-      "Value": "192.168.1.44"
+      "Value": {{ hostvars.pimaster.ansible_host }}
     },
     {
       "Key": "guestinfo.domain",
-      "Value": "houseofbears.co.uk"
+      "Value": {{ vcsa_dns_domain }}
     },
     {
       "Key": "guestinfo.ntp",
-      "Value": "10.64.0.1"
+      "Value": {{ vcsa_gateway }}
     },
     {
       "Key": "guestinfo.syslog",
@@ -41,7 +41,7 @@
     },
     {
       "Key": "guestinfo.password",
-      "Value": "VMware1!"
+      "Value": {{ esx_password }}
     },
     {
       "Key": "guestinfo.ssh",
@@ -55,12 +55,12 @@
   "NetworkMapping": [
     {
       "Name": "VM Network",
-      "Network": "pg_LabMgmt"
+      "Network": {{ default_portgroup }}
     }
   ],
   "Annotation": "Nested ESXi 6.7 Update 3 Appliance (Build 13006603) www.virtuallyghetto.com",
   "MarkAsTemplate": false,
-  "PowerOn": false,
+  "PowerOn": true,
   "InjectOvfEnv": false,
   "WaitForIP": false,
   "Name": null
