@@ -81,10 +81,30 @@
     verbosity: 2
   tags: ['deploy_vesxi']
 
-- name: deploy vesxi
-  include_tasks: vesxi_loop.yml
-  loop: "{{ mysequence }}"
-  loop_control:
-    extended: yes
-    loop_var: outer_item
+- name: Get VMs to check before deploy
+  shell: govc find -type VirtualMachine -json | /usr/bin/jq -r .
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  register: vm_results
+  delegate_to: localhost
   tags: ["deploy_vesxi"]
+
+- name: Debug variable ip_results
+  debug:
+    var: vm_results
+    verbosity: 2
+  tags: ['deploy_vesxi']
+
+#- name: deploy vesxi
+#  include_tasks: vesxi_loop.yml
+#  loop: "{{ mysequence }}"
+#  loop_control:
+#    extended: yes
+#    loop_var: outer_item
+#  tags: ["deploy_vesxi"]
