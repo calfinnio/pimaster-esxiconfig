@@ -61,7 +61,7 @@
   "Annotation": "Nested ESXi 6.7 Update 3 Appliance (Build 13006603) www.virtuallyghetto.com",
   "MarkAsTemplate": false,
   "PowerOn": true,
-  "InjectOvfEnv": false,
+  "InjectOvfEnv": true,
   "WaitForIP": false,
-  "Name": null
+  "Name": {{ vesxi_basename }}{{ ansible_loop.index}}
 }
