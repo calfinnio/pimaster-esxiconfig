@@ -1,4 +1,9 @@
 ---
+- name: Debug count
+  debug:
+    msg: "{{ outer_item.ansible_loop.index }}"
+  tags: ["deploy_vesxi"]
+  
 - name: template out deploy.json
   template:
     src: vesxi.json.j2
