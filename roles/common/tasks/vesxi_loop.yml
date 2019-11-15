@@ -18,6 +18,11 @@
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
+- name: IP to check
+  set_fact:
+    current_ip: "{{ vesxi_starting_ip|ipmath(ansible_loop.index0) }}"
+  tags: ["deploy_vesxi"]
+
 - name: Deploy vesxi{{ outer_item }}
   shell: govc library.deploy /{{ content_library_name }}/{{ vesxi_ovf_name }} -dc={{ vcsa_dc_name }}  -options vesxi{{ outer_item }}.json
   environment:
@@ -28,7 +33,7 @@
     GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
-  when: vesxi_starting_ip | ipmath(ansible_loop.index0) not in ip_results
+  when: current_ip not in ip_results
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 #not in ip_results
