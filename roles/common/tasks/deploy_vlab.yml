@@ -1,0 +1,8 @@
+---
+- name: deploy vesxi
+  include_tasks: vesxi_loop.yml
+  loop: "{{ vesxi_host_count }}"
+  loop_control:
+    extended: yes
+    loop_var: outer_item
+  tags: ["deploy_vesxi"]

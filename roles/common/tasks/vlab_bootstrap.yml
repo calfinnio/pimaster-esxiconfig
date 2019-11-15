@@ -184,9 +184,6 @@
     GOVC_RESOURCE_POOL: "*/Resources"
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
-#
-#echo | openssl s_client -showcerts -servername download3.vmware.com -connect download3.vmware.com:443 2>/dev/null | openssl x509 -fingerprint -noout -sha1 | awk '{print substr($0,index($0,"=")+1)}'
-#
-#govc library.create -sub=https://download3.vmware.com/software/vmw-tools/lib.json -ds=General1 -dc=HomeLab -ssl-thumbprint=56:53:D1:6F:CE:B9:C1:C9:25:D5:7F:41:11:DF:7B:00:2C:97:BF:95 vGhettoLib
-#
+
+
 

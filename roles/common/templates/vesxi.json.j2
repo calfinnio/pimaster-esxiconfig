@@ -1,0 +1,67 @@
+{
+  "DiskProvisioning": "flat",
+  "IPAllocationPolicy": "dhcpPolicy",
+  "IPProtocol": "IPv4",
+  "PropertyMapping": [
+    {
+      "Key": "guestinfo.hostname",
+      "Value": {{ vesx_basename }}{{ ansible_loop.index}}
+    },
+    {
+      "Key": "guestinfo.ipaddress",
+      "Value": {{ vesxi_starting_ip | ipmath(ansible_loop.index0) }}
+    },
+    {
+      "Key": "guestinfo.netmask",
+      "Value": "255.255.255.0"
+    },
+    {
+      "Key": "guestinfo.gateway",
+      "Value": "10.64.0.1"
+    },
+    {
+      "Key": "guestinfo.vlan",
+      "Value": ""
+    },
+    {
+      "Key": "guestinfo.dns",
+      "Value": "192.168.1.44"
+    },
+    {
+      "Key": "guestinfo.domain",
+      "Value": "houseofbears.co.uk"
+    },
+    {
+      "Key": "guestinfo.ntp",
+      "Value": "10.64.0.1"
+    },
+    {
+      "Key": "guestinfo.syslog",
+      "Value": ""
+    },
+    {
+      "Key": "guestinfo.password",
+      "Value": "VMware1!"
+    },
+    {
+      "Key": "guestinfo.ssh",
+      "Value": "True"
+    },
+    {
+      "Key": "guestinfo.createvmfs",
+      "Value": "False"
+    }
+  ],
+  "NetworkMapping": [
+    {
+      "Name": "VM Network",
+      "Network": "pg_LabMgmt"
+    }
+  ],
+  "Annotation": "Nested ESXi 6.7 Update 3 Appliance (Build 13006603) www.virtuallyghetto.com",
+  "MarkAsTemplate": false,
+  "PowerOn": false,
+  "InjectOvfEnv": false,
+  "WaitForIP": false,
+  "Name": null
+}

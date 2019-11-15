@@ -4,3 +4,4 @@
 - include: storage.yml
 - include: vms.yml
 - include: vlab_bootstrap.yml
+- include: deploy_vlab.yml
