@@ -74,6 +74,20 @@
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
+- name: Check powerstate of vesxi{{ outer_item }}
+  shell: govc vm.info -json vesxi{{ outer_item }} | jq .VirtualMachines[].Runtime.PowerState
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  delegate_to: localhost
+  register: vm.powerstate
+  tags: ["deploy_vesxi"]
+
 - name: PowerOn  vesxi{{ outer_item }}
   shell: govc vm.power -on {{ vesxi_basename }}{{ ansible_loop.index}}
   environment:
@@ -85,6 +99,7 @@
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
   delegate_to: localhost
+  when: vm.powerstate.stdout not "poweredOn"
   tags: ["deploy_vesxi"]
 #not in ip_results
 
