@@ -3,12 +3,14 @@
   debug:
     msg: "{{ outer_item }}"
     verbosity: 2
+  delegate_to: localhost
   tags: ["deploy_vesxi"]
 
 - name: Debug loop index
   debug:
     msg: "{{ ansible_loop.index }}"
     verbosity: 2
+  delegate_to: localhost
   tags: ["deploy_vesxi"]
 
 - name: template out deploy.json
@@ -21,18 +23,21 @@
 - name: IP to check
   set_fact:
     current_ip: "{{ vesxi_starting_ip|ipmath(ansible_loop.index0) }}"
+  delegate_to: localhost
   tags: ["deploy_vesxi"]
 
 - name: Debug current_ip
   debug:
     msg: "{{ current_ip }}"
     verbosity: 2
+  delegate_to: localhost
   tags: ["deploy_vesxi"]
 
 - name: Debug ip_results
   debug:
     msg: "{{ ip_results }}"
     verbosity: 2
+  delegate_to: localhost
   tags: ["deploy_vesxi"]
 
 - name: Deploy vesxi{{ outer_item }}

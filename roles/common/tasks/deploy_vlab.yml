@@ -8,6 +8,66 @@
     mysequence: "{{ range(1, vesxi_host_count + 1) | list }}"
   tags: ["deploy_vesxi"]
 
+
+- name: Get all hosts in DC
+  shell: govc ls /{{ vcsa_dc_name }}/host | /usr/bin/awk -F"/" '{print $NF}'
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  register: host_names
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
+
+- name: Convert Host list to var
+  set_fact:
+    hostnames: "{{ host_names.stdout.split('\n') }}"
+  tags: ['deploy_vesxi']
+
+- name: debug hostanmes variable
+  debug:
+    var: hostnames
+    verbosity: 2
+  tags: ['deploy_vesxi']
+
+- name: Get Host IPs
+  shell: govc host.info -dc={{ vcsa_dc_name }} -host={{ item }} -json | /usr/bin/jq -r .HostSystems[].Config.Network.Vnic[].Spec.Ip.IpAddress
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  register: host_results
+  loop: "{{ hostnames }}"
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
+
+- name: Debug variable ip_results
+  debug:
+    var: host_results.results
+    verbosity: 2
+  tags: ['deploy_vesxi']
+
+- name: Change results to dict
+  set_fact:
+    ip_results: "{{ ip_results|default({}) | combine( {item.item: item.stdout} ) }}"
+  with_items: "{{ host_results.results }}"
+  delegate_to: localhost
+  tags: ['deploy_vesxi']
+
+- name: Debug variable ip_results
+  debug:
+    var: ip_results
+    verbosity: 2
+  tags: ['deploy_vesxi']
+
 - name: deploy vesxi
   include_tasks: vesxi_loop.yml
   loop: "{{ mysequence }}"
