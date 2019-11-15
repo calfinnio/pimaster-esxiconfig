@@ -75,7 +75,7 @@
   tags: ["deploy_vesxi"]
 
 - name: PowerOn  vesxi{{ outer_item }}
-  shell: govc govc vm.power -on {{ vesxi_basename }}{{ ansible_loop.index}}
+  shell: govc vm.power -on {{ vesxi_basename }}{{ ansible_loop.index}}
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
