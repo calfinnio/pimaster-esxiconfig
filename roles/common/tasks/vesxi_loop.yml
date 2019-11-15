@@ -23,6 +23,18 @@
     current_ip: "{{ vesxi_starting_ip|ipmath(ansible_loop.index0) }}"
   tags: ["deploy_vesxi"]
 
+- name: Debug current_ip
+  debug:
+    msg: "{{ current_ip }}"
+    verbosity: 2
+  tags: ["deploy_vesxi"]
+
+- name: Debug ip_results
+  debug:
+    msg: "{{ ip_results }}"
+    verbosity: 2
+  tags: ["deploy_vesxi"]
+
 - name: Deploy vesxi{{ outer_item }}
   shell: govc library.deploy /{{ content_library_name }}/{{ vesxi_ovf_name }} -dc={{ vcsa_dc_name }}  -options vesxi{{ outer_item }}.json
   environment:
