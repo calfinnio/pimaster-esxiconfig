@@ -82,7 +82,7 @@
   tags: ['deploy_vesxi']
 
 - name: Get VMs to check before deploy
-  shell: govc find -type VirtualMachine -json | /usr/bin/jq -r .
+  shell: govc find -type VirtualMachine -json | /usr/bin/jq -r . | /usr/bin/awk -F"/" '{print $NF}'
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
