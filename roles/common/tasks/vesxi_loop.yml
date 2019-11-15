@@ -53,6 +53,19 @@
   when: current_ip not in ip_results
   delegate_to: localhost
   tags: ["deploy_vesxi"]
+
+- name: Deploy vesxi{{ outer_item }}
+  shell: govc govc vm.power -on {{ vesxi_basename }}{{ ansible_loop.index}}
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
 #not in ip_results
 
 
