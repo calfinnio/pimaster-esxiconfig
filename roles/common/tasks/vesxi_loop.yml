@@ -90,14 +90,11 @@
 
 - name: Debug vm powerstate
   debug:
-    var: "{{ vm_powerstate }}"
-    #verbosity: 2
+    msg: "{{ vm_powerstate }}"
+    verbosity: 2
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
-- name: Convert powerstate check to var
-  set_fact:
-    vm_poweredOn: "{{ vm_powerstate.stdout }}"
 - name: PowerOn  vesxi{{ outer_item }}
   shell: govc vm.power -on {{ vesxi_basename }}{{ ansible_loop.index}}
   environment:
