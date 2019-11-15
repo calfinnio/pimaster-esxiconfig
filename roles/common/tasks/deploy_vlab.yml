@@ -95,9 +95,15 @@
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
-- name: Debug variable ip_results
+- name: Debug variable vm_results
   debug:
     var: vm_results
+    verbosity: 2
+  tags: ['deploy_vesxi']
+
+- name: Debug msg vm_results
+  debug:
+    var: vm_results.stdout
     verbosity: 2
   tags: ['deploy_vesxi']
 
