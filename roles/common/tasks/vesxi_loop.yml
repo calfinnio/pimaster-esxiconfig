@@ -75,7 +75,7 @@
   tags: ["deploy_vesxi"]
 
 - name: Check powerstate of vesxi{{ outer_item }}
-  shell: govc vm.info -json vesxi{{ outer_item }} | jq .VirtualMachines[].Runtime.PowerState
+  shell: govc vm.info -json vesxi{{ outer_item }} | /usr/bin/jq .VirtualMachines[].Runtime.PowerState
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
