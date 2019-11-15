@@ -12,7 +12,7 @@
 - name: template out deploy.json
   template:
     src: vesxi.json.j2
-    dest: vesxi{{ outer_item.ansible_loop.index }}.json
+    dest: vesxi{{ outer_item }}.json
   delegate_to: localhost
   tags: ["deploy_vesxi"]  
 #- name: Copy using inline content to second file
