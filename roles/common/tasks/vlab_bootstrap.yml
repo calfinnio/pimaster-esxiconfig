@@ -137,6 +137,7 @@
   set_fact:
     ip_results: "{{ ip_results|default({}) | combine( {item.item: item.stdout} ) }}"
   with_items: "{{ host_results.results }}"
+  delegate_to: localhost
   tags: ['vlab-bootstrap']
 
 - name: Debug variable ip_results
