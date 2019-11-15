@@ -5,5 +5,4 @@
   loop_control:
     extended: yes
     loop_var: outer_item
-  delegate_to: localhost
   tags: ["deploy_vesxi"]
