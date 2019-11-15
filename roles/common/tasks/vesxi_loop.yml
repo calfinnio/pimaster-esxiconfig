@@ -88,6 +88,13 @@
   register: vm_powerstate
   tags: ["deploy_vesxi"]
 
+- name: Debug vm powerstate
+  debug:
+    var: "{{ vm_powerstate.stdout }}"
+    #verbosity: 2
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
+
 - name: PowerOn  vesxi{{ outer_item }}
   shell: govc vm.power -on {{ vesxi_basename }}{{ ansible_loop.index}}
   environment:
