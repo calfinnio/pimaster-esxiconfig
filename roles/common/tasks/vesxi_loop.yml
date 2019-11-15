@@ -26,6 +26,12 @@
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
+- name: VM name to check
+  set_fact:
+    current_name: "{{ vesxi_basename }}{{ ansible_loop.index}}"
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
+
 - name: Debug current_ip
   debug:
     msg: "{{ current_ip }}"
@@ -50,11 +56,13 @@
     GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
-  when: current_ip not in ip_results
+  when: 
+    - current_ip not in ip_results
+    - current_name not in current_vms
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
-- name: Deploy vesxi{{ outer_item }}
+- name: PowerOn  vesxi{{ outer_item }}
   shell: govc govc vm.power -on {{ vesxi_basename }}{{ ansible_loop.index}}
   environment:
     GOPATH: "{{ go_path }}"

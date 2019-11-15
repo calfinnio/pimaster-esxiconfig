@@ -95,6 +95,11 @@
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
+- name: Set VM results fact
+  set_fact:
+    current_vms: "{{ vm_results.stdout }}"
+  tags: ["deploy_vesxi"]
+
 - name: Debug variable vm_results
   debug:
     var: vm_results
@@ -107,10 +112,10 @@
     verbosity: 2
   tags: ['deploy_vesxi']
 
-#- name: deploy vesxi
-#  include_tasks: vesxi_loop.yml
-#  loop: "{{ mysequence }}"
-#  loop_control:
-#    extended: yes
-#    loop_var: outer_item
-#  tags: ["deploy_vesxi"]
+- name: deploy vesxi
+  include_tasks: vesxi_loop.yml
+  loop: "{{ mysequence }}"
+  loop_control:
+    extended: yes
+    loop_var: outer_item
+  tags: ["deploy_vesxi"]
