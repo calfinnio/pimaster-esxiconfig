@@ -2,11 +2,13 @@
 - name: Debug count
   debug:
     msg: "{{ outer_item }}"
+    verbosity: 2
   tags: ["deploy_vesxi"]
 
 - name: Debug loop index
   debug:
     msg: "{{ ansible_loop.index }}"
+    verbosity: 2
   tags: ["deploy_vesxi"]
 
 - name: template out deploy.json
@@ -14,7 +16,24 @@
     src: vesxi.json.j2
     dest: vesxi{{ outer_item }}.json
   delegate_to: localhost
-  tags: ["deploy_vesxi"]  
+  tags: ["deploy_vesxi"]
+
+- name: Deploy vesxi{{ outer_item }}
+  shell: govc library.deploy /{{ content_library_name }}/{{ vesxi_ovf_name }} -dc={{ vcsa_dc_name }}  -options vesxi{{ outer_item }}.json
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  when: vesxi_starting_ip | ipmath(ansible_loop.index0) not in ip_results
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
+#not in ip_results
+
+
 #- name: Copy using inline content to second file
 # # copy:
 #  #  content: |
