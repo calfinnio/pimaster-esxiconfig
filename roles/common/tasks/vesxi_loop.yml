@@ -61,7 +61,7 @@
   tags: ["deploy_vesxi"]
 
 - name: Deploy vesxi{{ outer_item }}
-  shell: govc library.deploy -dc={{ vcsa_dc_name }} /{{ content_library_name }}/{{ vesxi_ovf_name }} {{ vesxi_basename }}{{ ansible_loop.index}} -options vesxi{{ outer_item }}.json
+  shell: govc library.deploy -dc={{ vcsa_dc_name }} /{{ content_library_name }}/{{ vesxi_ovf_name }} -options vesxi{{ outer_item }}.json
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
