@@ -6,6 +6,8 @@
 - name: Generate list for number of hosts
   set_fact:
     mysequence: "{{ range(1, {{ vesxi_host_count }} + 1) | list }}"
+  tags: ["deploy_vesxi"]
+  
 - name: deploy vesxi
   include_tasks: vesxi_loop.yml
   loop: "{{ mysequence }}"
