@@ -85,7 +85,7 @@
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
   delegate_to: localhost
-  register: vm.powerstate
+  register: vm_powerstate
   tags: ["deploy_vesxi"]
 
 - name: PowerOn  vesxi{{ outer_item }}
@@ -99,7 +99,7 @@
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
   delegate_to: localhost
-  when: vm.powerstate.stdout not "poweredOn"
+  when: vm_powerstate.stdout not "poweredOn"
   tags: ["deploy_vesxi"]
 #not in ip_results
 
