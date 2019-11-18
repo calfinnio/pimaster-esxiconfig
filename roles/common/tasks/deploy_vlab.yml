@@ -112,6 +112,44 @@
     verbosity: 2
   tags: ['deploy_vesxi']
 
+- name: Login into vCenter and get cookies
+  uri:
+    url: https://{{ vcsa_dns_name }}/rest/com/vmware/cis/session
+    force_basic_auth: yes
+    validate_certs: no
+    method: POST
+    user: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    password: "{{ esx_password }}"
+  register: login
+  delegate_to: localhost
+  tags: ["api_calls"]
+
+- name: Get all hosts from vCenter using cookies from last task
+  uri:
+    url: https://{{ vcsa_dns_name }}/rest/vcenter/host
+    force_basic_auth: yes
+    validate_certs: no
+    headers:
+      Cookie: "{{ login.set_cookie }}"
+  register: vchosts
+  delegate_to: localhost
+  tags: ["api_calls"]
+
+- name: Debug login variabel
+  debug:
+    msg: "{{ login }}"
+  tags: ["api_calls"]
+
+- name: Debug vchosts variable
+  debug:
+    msg: "{{ vchosts }}"
+  tags: ["api_calls"]
+#- name: Get network_id
+#- name: Get host_id
+#- name: Get folder_id
+#- name: Get resource_pool_id
+#- name: Get datastore_id
+
 - name: deploy vesxi
   include_tasks: vesxi_loop.yml
   loop: "{{ mysequence }}"
@@ -119,3 +157,11 @@
     extended: yes
     loop_var: outer_item
   tags: ["deploy_vesxi"]
+
+- name: Add vesxi to vcsa
+  include_tasks: vesxi_hostadd_loop.yml
+  loop: "{{ mysequence }}"
+  loop_control:
+    extended: yes
+    loop_var: outer_item
+  tags: ["deploy_vesxi"] 
