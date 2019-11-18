@@ -124,26 +124,75 @@
   delegate_to: localhost
   tags: ["api_calls"]
 
-- name: Get all hosts from vCenter using cookies from last task
+- name: Get all hosts from vCenter using cookies
   uri:
     url: https://{{ vcsa_dns_name }}/rest/vcenter/host
     force_basic_auth: yes
     validate_certs: no
     headers:
       Cookie: "{{ login.set_cookie }}"
-  register: vchosts
+  register: vc_hosts
   delegate_to: localhost
-  tags: ["api_calls"]
-
-- name: Debug login variabel
-  debug:
-    msg: "{{ login }}"
   tags: ["api_calls"]
 
 - name: Debug vchosts variable
   debug:
-    msg: "{{ vchosts }}"
+    msg: "{{ vc_hosts }}"
+    verbosity: 2
   tags: ["api_calls"]
+
+- name: Get network_id
+  uri:
+    url: https://{{ vcsa_dns_name }}/rest/vcenter/network
+    force_basic_auth: yes
+    validate_certs: no
+    headers:
+      Cookie: "{{ login.set_cookie }}"
+  register: vc_networks
+  delegate_to: localhost
+  tags: ["api_calls"]
+
+- name: Debug vc_networks variable
+  debug:
+    msg: "{{ vc_networks }}"
+    verbosity: 2
+  tags: ["api_calls"]
+
+- name: Get datastore_id
+  uri:
+    url: https://{{ vcsa_dns_name }}/rest/vcenter/datastore?filter.names.1={{ default_datastore}}
+    force_basic_auth: yes
+    validate_certs: no
+    headers:
+      Cookie: "{{ login.set_cookie }}"
+  register: vc_datastore
+  delegate_to: localhost
+  tags: ["api_calls"]
+
+- name: Debug vc_datastore variable
+  debug:
+    msg: "{{ vc_datastore }}"
+    verbosity: 2
+  tags: ["api_calls"] 
+
+- name: Get resource_pool_id
+  uri:
+    url: https://{{ vcsa_dns_name }}/rest/vcenter/resource-pool?filter.names.1=Resources&filter.hosts.1={{ vc_hosts.json.value[0].host}}
+    force_basic_auth: yes
+    validate_certs: no
+    headers:
+      Cookie: "{{ login.set_cookie }}"
+  register: vc_resource_pool
+  delegate_to: localhost
+  tags: ["api_calls"]
+
+- name: Debug resource_pool_id variable
+  debug:
+    msg: "{{ vc_resource_pool }}"
+    verbosity: 2
+  tags: ["api_calls"]
+
+
 #- name: Get network_id
 #- name: Get host_id
 #- name: Get folder_id
