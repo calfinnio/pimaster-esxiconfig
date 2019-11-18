@@ -135,9 +135,20 @@
   delegate_to: localhost
   tags: ["api_calls"]
 
-- name: Debug vchosts variable
+- name: Debug vc_hosts variable
   debug:
     msg: "{{ vc_hosts }}"
+    verbosity: 2
+  tags: ["api_calls"]
+
+- name: Set var for host_id
+  set_fact:
+    host_id: "{{ vc_hosts.json  | json_query('value[*].host') }}"
+  tags: ["api_calls"]
+
+- name: Debug host_id variable
+  debug:
+    msg: "{{ host_id }}"
     verbosity: 2
   tags: ["api_calls"]
 
