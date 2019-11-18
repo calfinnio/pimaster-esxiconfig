@@ -1,20 +1,20 @@
 ---
 - name: Include vesxi vars
   include_vars: vesxi_vars.yml
-  tags: ["deploy_vesxi"]
+  tags: ["deploy_vesxi","api_calls"]
 
 - name: Include secrets
   include_vars: 
     file: secrets_physical_esx.yml
-  tags: ["deploy_vesxi"]
+  tags: ["deploy_vesxi","api_calls"]
 
 - name: Include vcsa connection vars
   include_vars: vcsa_vars.yml
-  tags: ["deploy_vesxi"]
+  tags: ["deploy_vesxi","api_calls"]
 
 - name: Include content library vars
   include_vars: content_library_vars.yml
-  tags: ["deploy_vesxi"]
+  tags: ["deploy_vesxi","api_calls"]
 
 - name: Generate list for number of hosts
   set_fact:
