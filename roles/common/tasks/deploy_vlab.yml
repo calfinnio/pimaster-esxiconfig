@@ -144,6 +144,7 @@
 - name: Set var for host_id
   set_fact:
     host_id: "{{ vc_hosts.json  | json_query('value[*].host') }}"
+  when: "{{ vc_hosts.json  | json_query('value[*].name') }} == {{ esx_address }}"
   tags: ["api_calls"]
 
 - name: Debug host_id variable
