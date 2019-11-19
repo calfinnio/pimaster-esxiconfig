@@ -75,36 +75,27 @@
 
 - name: Login into vCenter and get cookies
   uri:
-    url: https://{{ vcsa_ip_addr }}/rest/com/vmware/cis/session
+    url: https://{{ vcsa_dns_name }}/rest/com/vmware/cis/session
     force_basic_auth: yes
     validate_certs: no
     method: POST
     user: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
     password: "{{ esx_password }}"
-  ignore_errors: yes
   register: login2
-  delegate_to: localhost
-  tags: ["api_calls","host_id"]
-
-- name: Debug login
-  debug:
-    msg: "{{ login2 }}"
   delegate_to: localhost
   tags: ["api_calls","host_id"]
 
 - name: Deploy Library Item via api
   uri:
-    url: https://{{ vcsa_ip_addr }}/rest/com/vmware/vcenter/ovf/library-item/id:fc0c8c96-6969-46b3-86d0-ec7655852e78?~action=deploy
+    url: https://{{ vcsa_dns_name }}/rest/com/vmware/vcenter/ovf/library-item/id:fc0c8c96-6969-46b3-86d0-ec7655852e78?~action=deploy
     force_basic_auth: yes
     validate_certs: no
     headers:
-      Content-Type: application/json
-      Accept: application/json
       Cookie: "{{ login2.set_cookie }}"
     body_format: json
-    body: "{{ lookup('file', deploy_json) }}"
+    body: "{{ lookup('file', 'api1.json') }}"
     method: POST
-  ignore_erros: yes
+  delegate_to: localhost
   tags: ["api_calls","deploy_vesxi"]
 #  https://{{vc}}/rest/com/vmware/vcenter/ovf/library-item/id:fc0c8c96-6969-46b3-86d0-ec7655852e78?~action=deploy
 
