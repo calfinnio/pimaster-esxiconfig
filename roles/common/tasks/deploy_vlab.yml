@@ -202,9 +202,7 @@
 
 - name: Set var for datastore_id
   set_fact:
-    datastore_id: "{{ vc_datastore.json }} | json_query(query)"
-  vars:
-    query: "value[?name=='General1'].datastore"
+    datastore_id: "{{ vc_datastore.json.value.0.datastore }}"
   tags: ["api_calls"]
 
 - name: Get resource_pool_id
