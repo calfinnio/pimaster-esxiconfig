@@ -1,0 +1,159 @@
+{
+    "deployment_spec": {
+        "name": "{{ vesxi_basename }}{{ ansible_loop.index}}",
+        "annotation": "TESTTESTTESTNested ESXi 6.7 Update 3 Appliance (Build 14320388) www.virtuallyghetto.com",
+        "accept_all_EULA": true,
+        "network_mappings": [
+            {
+                "key": "VM Network",
+                "value": "{{ netwrok_id | first }}"
+            }
+        ],
+        "storage_provisioning": "thin",
+        "additional_parameters": [
+         {
+            "@class":"com.vmware.vcenter.ovf.property_params",
+            "properties":[
+               {
+                        "instance_id": "",
+                        "class_id": "",
+                        "description": "ESXi Hostname (DHCP if left blank)",
+                        "id": "guestinfo.hostname",
+                        "label": "Hostname",
+                        "category": "",
+                        "type": "string",
+                        "value": "{{ vesxi_basename }}{{ ansible_loop.index}}",
+                        "ui_optional": false
+                    },
+                    {
+                        "instance_id": "",
+                        "class_id": "",
+                        "description": "IP Address of vmk0 (DHCP if left blank)",
+                        "id": "guestinfo.ipaddress",
+                        "label": "IP Address",
+                        "category": "",
+                        "type": "string",
+                        "value": "{{ vesxi_starting_ip | ipmath(ansible_loop.index0) }}",
+                        "ui_optional": false
+                    },
+                    {
+                        "instance_id": "",
+                        "class_id": "",
+                        "description": "Netmask of vmk0 (DHCP if left blank)",
+                        "id": "guestinfo.netmask",
+                        "label": "Netmask",
+                        "category": "",
+                        "type": "string",
+                        "value": "255.255.255.0",
+                        "ui_optional": false
+                    },
+                    {
+                        "instance_id": "",
+                        "class_id": "",
+                        "description": "Gateway of vmk0 (DHCP if left blank)",
+                        "id": "guestinfo.gateway",
+                        "label": "Gateway",
+                        "category": "",
+                        "type": "string",
+                        "value": "{{ vcsa_gateway }}",
+                        "ui_optional": false
+                    },
+                    {
+                        "instance_id": "",
+                        "class_id": "",
+                        "description": "VLAN ID of vmk0 (DHCP if left blank)",
+                        "id": "guestinfo.vlan",
+                        "label": "VLAN ID",
+                        "category": "",
+                        "type": "string",
+                        "value": "",
+                        "ui_optional": false
+                    },
+                    {
+                        "instance_id": "",
+                        "class_id": "",
+                        "description": "DNS Server (DHCP if left blank)",
+                        "id": "guestinfo.dns",
+                        "label": "DNS",
+                        "category": "",
+                        "type": "string",
+                        "value": "{{ hostvars.pimaster.ansible_host }}",
+                        "ui_optional": false
+                    },
+                    {
+                        "instance_id": "",
+                        "class_id": "",
+                        "description": "DNS Domain (DHCP if left blank)",
+                        "id": "guestinfo.domain",
+                        "label": "DNS Domain",
+                        "category": "",
+                        "type": "string",
+                        "value": "{{ vcsa_dns_domain }}",
+                        "ui_optional": false
+                    },
+                    {
+                        "instance_id": "",
+                        "class_id": "",
+                        "description": "NTP Server",
+                        "id": "guestinfo.ntp",
+                        "label": "NTP Servers",
+                        "category": "",
+                        "type": "string",
+                        "value": "{{ vcsa_gateway }}",
+                        "ui_optional": false
+                    },
+                    {
+                        "instance_id": "",
+                        "class_id": "",
+                        "description": "Syslog Server",
+                        "id": "guestinfo.syslog",
+                        "label": "Syslog Server",
+                        "category": "",
+                        "type": "string",
+                        "value": "192.168.1.200",
+                        "ui_optional": false
+                    },
+                    {
+                        "instance_id": "",
+                        "class_id": "",
+                        "description": "ESXi Root Password (default VMware1!)",
+                        "id": "guestinfo.password",
+                        "label": "Password",
+                        "category": "",
+                        "type": "password",
+                        "value": "{{ esx_password }}",
+                        "ui_optional": false
+                    },
+                    {
+                        "instance_id": "",
+                        "class_id": "",
+                        "description": "Enable SSH",
+                        "id": "guestinfo.ssh",
+                        "label": "SSH",
+                        "category": "",
+                        "type": "boolean",
+                        "value": "True",
+                        "ui_optional": false
+                    },
+                    {
+                        "instance_id": "",
+                        "class_id": "",
+                        "description": "Automatically create local VMFS Datastore (datastore1)",
+                        "id": "guestinfo.createvmfs",
+                        "label": "VMFS",
+                        "category": "",
+                        "type": "boolean",
+                        "value": "False",
+                        "ui_optional": false
+                    }
+            ],
+            "type":"PropertyParams"
+         }
+        ],
+        "default_datastore_id": "{{ datastore_id | first }}"
+    },
+    "target": {
+        "resource_pool_id": "{{ resource_pool_id | first }}",
+        "folder_id": "{{ folder_id | first }}"
+    }
+}

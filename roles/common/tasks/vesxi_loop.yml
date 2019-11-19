@@ -15,8 +15,8 @@
 
 - name: template out deploy.json
   template:
-    src: vesxi.json.j2
-    dest: vesxi{{ outer_item }}.json
+    src: vesxi_api.json.j2
+    dest: api_vesxi{{ outer_item }}.json
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
@@ -60,19 +60,33 @@
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
-- name: Deploy vesxi{{ outer_item }}
-  shell: govc library.deploy -dc={{ vcsa_dc_name }} /{{ content_library_name }}/{{ vesxi_ovf_name }} -options vesxi{{ outer_item }}.json
-  environment:
-    GOPATH: "{{ go_path }}"
-    PATH: "{{ go_bin }}"
-    GOVC_INSECURE: 1
-    GOVC_URL: "{{ vcsa_dns_name }}"
-    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
-    GOVC_PASSWORD: "{{ esx_password }}"
-    GOVC_RESOURCE_POOL: "*/Resources"
-  when: current_name not in current_vms
+- name: Deploy Library Item via api
+  uri:
+    url: https://{{ vcsa_dns_name }}/rest/com/vmware/vcenter/ovf/library-item/id:fc0c8c96-6969-46b3-86d0-ec7655852e78?~action=deploy
+    force_basic_auth: yes
+    validate_certs: no
+    headers:
+      Cookie: "{{ login.set_cookie }}"
+    body_format: json
+    body: "{{ lookup('file','api_vesxi+outer_item+.json') }}"
+    method: POST
   delegate_to: localhost
-  tags: ["deploy_vesxi"]
+  tags: ["api_calls","deploy_vesxi"]
+#  https://{{vc}}/rest/com/vmware/vcenter/ovf/library-item/id:fc0c8c96-6969-46b3-86d0-ec7655852e78?~action=deploy
+
+#- name: Deploy vesxi{{ outer_item }}
+#  shell: govc library.deploy -dc={{ vcsa_dc_name }} /{{ content_library_name }}/{{ vesxi_ovf_name }} -options vesxi{{ outer_item }}.json
+#  environment:
+#    GOPATH: "{{ go_path }}"
+#    PATH: "{{ go_bin }}"
+#    GOVC_INSECURE: 1
+#    GOVC_URL: "{{ vcsa_dns_name }}"
+#    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+#    GOVC_PASSWORD: "{{ esx_password }}"
+#    GOVC_RESOURCE_POOL: "*/Resources"
+#  when: current_name not in current_vms
+#  delegate_to: localhost
+#  tags: ["deploy_vesxi"]
 
 - name: Check powerstate of vesxi{{ outer_item }}
   shell: govc vm.info -json vesxi{{ outer_item }} | /usr/bin/jq .VirtualMachines[].Runtime.PowerState | /bin/sed 's/["\]//g'
