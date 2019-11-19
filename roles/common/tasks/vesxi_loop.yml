@@ -20,6 +20,19 @@
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
+- name: Setting file path string for deployment later via lookup
+  set_fact:
+    deploy_json: api_vesxi{{ outer_item }}.json
+    delegate_to: localhost
+  tags: ["deploy_vesxi"]
+
+- name: Debug deploy_json index
+  debug:
+    msg: "{{ deploy_json }}"
+    verbosity: 2
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
+
 - name: IP to check
   set_fact:
     current_ip: "{{ vesxi_starting_ip|ipmath(ansible_loop.index0) }}"
@@ -68,7 +81,7 @@
     headers:
       Cookie: "{{ login.set_cookie }}"
     body_format: json
-    body: "{{ lookup('file','api_vesxi'+outer_item+'.json') }}"
+    body: "{{ lookup('file', deploy_json) }}"
     method: POST
   delegate_to: localhost
   tags: ["api_calls","deploy_vesxi"]
