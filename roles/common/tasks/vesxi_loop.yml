@@ -85,6 +85,12 @@
   delegate_to: localhost
   tags: ["api_calls","host_id"]
 
+- name: Debug login
+  debug:
+    msg: "{{ login2 }}"
+  delegate_to: localhost
+  tags: ["api_calls","host_id"]
+
 - name: Deploy Library Item via api
   uri:
     url: https://{{ vcsa_ip_addr }}/rest/com/vmware/vcenter/ovf/library-item/id:fc0c8c96-6969-46b3-86d0-ec7655852e78?~action=deploy
@@ -94,7 +100,6 @@
       Content-Type: application/json
       Accept: application/json
       Cookie: "{{ login2.set_cookie }}"
-    status_code: 200,201.403
     body_format: json
     body: "{{ lookup('file', deploy_json) }}"
     method: POST
