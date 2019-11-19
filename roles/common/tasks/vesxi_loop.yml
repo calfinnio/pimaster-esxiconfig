@@ -91,7 +91,10 @@
     force_basic_auth: yes
     validate_certs: no
     headers:
+      Content-Type: application/json
+      Accept: application/json
       Cookie: "{{ login2.set_cookie }}"
+    status_code: 200,201.403
     body_format: json
     body: "{{ lookup('file', deploy_json) }}"
     method: POST
