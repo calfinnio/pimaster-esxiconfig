@@ -68,7 +68,7 @@
     headers:
       Cookie: "{{ login.set_cookie }}"
     body_format: json
-    body: "{{ lookup('file','api_vesxi+outer_item+.json') }}"
+    body: "{{ lookup('file','api_vesxi'+outer_item+'.json') }}"
     method: POST
   delegate_to: localhost
   tags: ["api_calls","deploy_vesxi"]
