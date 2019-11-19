@@ -151,6 +151,7 @@
     host_id: '{{vc_hosts.json | json_query(query)}}'
   vars:
     query: '[?value[*].name == {{ esx_address }}].host'
+  tags: ["api_calls"]
 
 - name: Debug host_id variable
   debug:
