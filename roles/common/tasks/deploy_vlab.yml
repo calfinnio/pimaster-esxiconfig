@@ -1,20 +1,20 @@
 ---
 - name: Include vesxi vars
   include_vars: vesxi_vars.yml
-  tags: ["deploy_vesxi","api_calls"]
+  tags: ["deploy_vesxi","api_calls","host_id"]
 
 - name: Include secrets
   include_vars: 
     file: secrets_physical_esx.yml
-  tags: ["deploy_vesxi","api_calls"]
+  tags: ["deploy_vesxi","api_calls","host_id"]
 
 - name: Include vcsa connection vars
   include_vars: vcsa_vars.yml
-  tags: ["deploy_vesxi","api_calls"]
+  tags: ["deploy_vesxi","api_calls","host_id"]
 
 - name: Include content library vars
   include_vars: content_library_vars.yml
-  tags: ["deploy_vesxi","api_calls"]
+  tags: ["deploy_vesxi","api_calls","host_id"]
 
 - name: Generate list for number of hosts
   set_fact:
@@ -122,7 +122,7 @@
     password: "{{ esx_password }}"
   register: login
   delegate_to: localhost
-  tags: ["api_calls"]
+  tags: ["api_calls","host_id"]
 
 - name: Get all hosts from vCenter using cookies
   uri:
@@ -133,13 +133,13 @@
       Cookie: "{{ login.set_cookie }}"
   register: vc_hosts
   delegate_to: localhost
-  tags: ["api_calls"]
+  tags: ["api_calls","host_id"]
 
 - name: Debug vc_hosts variable
   debug:
     msg: "{{ vc_hosts }}"
     verbosity: 2
-  tags: ["api_calls"]
+  tags: ["api_calls","host_id"]
 
 #- name: Set var for host_id
 #  set_fact:
@@ -149,13 +149,13 @@
 - name: Set var for host_id
   set_fact:
     host_id: "{{vc_hosts.json | json_query(\"[?value[*].name == '\" + esx_address + \"'].host\") }}"
-  tags: ["api_calls"]
+  tags: ["api_calls","host_id"]
 
 - name: Debug host_id variable
   debug:
     msg: "{{ host_id }}"
     verbosity: 2
-  tags: ["api_calls"]
+  tags: ["api_calls","host_id"]
 
 - name: Get network_id
   uri:
