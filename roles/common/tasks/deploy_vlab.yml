@@ -178,7 +178,9 @@
 
 - name: Set var for network_id
   set_fact:
-    network_id: "{{ vc_networks.json }} | json_query([?'value[*].name' == {{ default_portgroup }}].network)"
+    network_id: "{{vc_networks.json | json_query(query) }}"
+  vars:
+    query: "value[?name=='{{default_portgroup}}'].network"
   tags: ["api_calls"]
 
 - name: Get datastore_id
@@ -200,7 +202,9 @@
 
 - name: Set var for datastore_id
   set_fact:
-    datastore_id: "{{ vc_datastore.json }} | json_query([?'value[*].name' == {{ default_datastore }}].datastore)"
+    datastore_id: "{{ vc_datastore.json }} | json_query(query)"
+  vars:
+    query: "value[?name=='{{default_datastore}}'].datastore"
   tags: ["api_calls"]
 
 - name: Get resource_pool_id
@@ -220,9 +224,9 @@
     verbosity: 2
   tags: ["api_calls"]
 
-- name: Set var for datastore_id
+- name: Set var for resource_pool_id
   set_fact:
-    resource_pool_id: "{{ vc_resource_pool.json }} | json_query('value[*].resource_pool')"
+    resource_pool_id: "{{ vc_resource_pool.json.value[0].name }}"
   tags: ["api_calls"]
 
 - name: Get folder_id
@@ -238,10 +242,14 @@
 
 - name: Debug vc_folder variable
   debug:
-    msg: "{{ vc_datastore }}"
+    msg: "{{ vc_folder }}"
     verbosity: 2
   tags: ["api_calls"] 
 
+- name: Set var for resource_pool_id
+  set_fact:
+    folder_id: "{{ vc_folder.json.value[0].folder }}"
+  tags: ["api_calls"]
 #- name: Set var for datastore_id
 #  set_fact:
 #    folder_id: "{{ vc_folder.json }} | json_query([?'value[*].name' == {{ default_datastore }}].datastore)"
