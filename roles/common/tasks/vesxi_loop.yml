@@ -74,14 +74,21 @@
   tags: ["deploy_vesxi"]
 
 - name: Login into vCenter and get cookies
-  shell: curl -k -X POST -H "Accept: application/json" --basic -u administrator@vsphere.local:VMware1!  https://{{ vcsa_ip_addr }}/rest/com/vmware/cis/session  | /usr/bin/jq .value 
-  regist: curl1
+  uri:
+    url: https://{{ vcsa_ip_addr }}/rest/com/vmware/cis/session
+    force_basic_auth: yes
+    validate_certs: no
+    method: POST
+    user: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    password: "{{ esx_password }}"
+  ignore_errors: yes
+  register: login2
   delegate_to: localhost
   tags: ["api_calls","host_id"]
 
 - name: Debug login
   debug:
-    msg: "{{ curl1 }}"
+    msg: "{{ login2 }}"
   delegate_to: localhost
   tags: ["api_calls","host_id"]
 
@@ -93,7 +100,7 @@
     headers:
       Content-Type: application/json
       Accept: application/json
-      vmware-api-session-id: $SESSION_ID": "{{ login2.set_cookie }}"
+      Cookie: "{{ login2.set_cookie }}"
     body_format: json
     body: "{{ lookup('file', deploy_json) }}"
     method: POST
