@@ -74,7 +74,7 @@
   tags: ["deploy_vesxi"]
 
 - name: Login into vCenter and get cookies
-  shell: curl -k -X POST -H 'Accept: application/json' --basic -u administrator@vsphere.local:VMware1!  $VCENTER/rest/com/vmware/cis/session  | /usr/bin/jq .value 
+  shell: curl -k -X POST -H "Accept: application/json" --basic -u administrator@vsphere.local:VMware1!  https://{{ vcsa_ip_addr }}/rest/com/vmware/cis/session  | /usr/bin/jq .value 
   regist: curl1
   delegate_to: localhost
   tags: ["api_calls","host_id"]
