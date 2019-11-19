@@ -185,7 +185,7 @@
 
 - name: Get datastore_id
   uri:
-    url: https://{{ vcsa_dns_name }}/rest/vcenter/datastore?filter.names.1={{ default_datastore}}
+    url: https://{{ vcsa_dns_name }}/rest/vcenter/datastore?filter.names.1={{ default_datastore }}
     force_basic_auth: yes
     validate_certs: no
     headers:
@@ -204,7 +204,7 @@
   set_fact:
     datastore_id: "{{ vc_datastore.json }} | json_query(query)"
   vars:
-    query: "value[?name=='{{default_datastore}}'].datastore"
+    query: "value[?name=='General1'].datastore"
   tags: ["api_calls"]
 
 - name: Get resource_pool_id
@@ -226,7 +226,7 @@
 
 - name: Set var for resource_pool_id
   set_fact:
-    resource_pool_id: "{{ vc_resource_pool.json.value[0].name }}"
+    resource_pool_id: "{{ vc_resource_pool.json.value[0].resource_pool }}"
   tags: ["api_calls"]
 
 - name: Get folder_id
