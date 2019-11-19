@@ -155,7 +155,7 @@
 
 - name: Debug host_id variable
   debug:
-    msg: "{{ host_id }}"
+    var: "{{ host_id }}"
     verbosity: 2
   tags: ["api_calls","host_id"]
 
