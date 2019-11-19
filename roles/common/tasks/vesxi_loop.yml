@@ -104,7 +104,7 @@
     body_format: json
     body: "{{ lookup('file', deploy_json) }}"
     method: POST
-  delegate_to: localhost
+  ignore_erros: yes
   tags: ["api_calls","deploy_vesxi"]
 #  https://{{vc}}/rest/com/vmware/vcenter/ovf/library-item/id:fc0c8c96-6969-46b3-86d0-ec7655852e78?~action=deploy
 
