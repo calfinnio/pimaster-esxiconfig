@@ -175,6 +175,11 @@
     verbosity: 2
   tags: ["api_calls"]
 
+- name: Set var for network_id
+  set_fact:
+    network_id: "{{ vc_networks.json }} | json_query([?'value[*].name' == {{ default_portgroup }}].network)"
+  tags: ["api_calls"]
+
 - name: Get datastore_id
   uri:
     url: https://{{ vcsa_dns_name }}/rest/vcenter/datastore?filter.names.1={{ default_datastore}}
@@ -192,9 +197,14 @@
     verbosity: 2
   tags: ["api_calls"] 
 
+- name: Set var for datastore_id
+  set_fact:
+    datastore_id: "{{ vc_datastore.json }} | json_query([?'value[*].name' == {{ default_datastore }}].datastore)"
+  tags: ["api_calls"]
+
 - name: Get resource_pool_id
   uri:
-    url: https://{{ vcsa_dns_name }}/rest/vcenter/resource-pool?filter.names.1=Resources&filter.hosts.1={{ vc_hosts.json.value[0].host}}
+    url: https://{{ vcsa_dns_name }}/rest/vcenter/resource-pool?filter.names.1=Resources&filter.hosts.1={{ host_id }}
     force_basic_auth: yes
     validate_certs: no
     headers:
@@ -209,6 +219,32 @@
     verbosity: 2
   tags: ["api_calls"]
 
+- name: Set var for datastore_id
+  set_fact:
+    resource_pool_id: "{{ vc_resource_pool.json }} | json_query('value[*].resource_pool')"
+  tags: ["api_calls"]
+
+- name: Get folder_id
+  uri:
+    url: https://{{ vcsa_dns_name }}/rest/vcenter/folder?filter.type=VIRTUAL_MACHINE&filter.names.1=vm
+    force_basic_auth: yes
+    validate_certs: no
+    headers:
+      Cookie: "{{ login.set_cookie }}"
+  register: vc_folder
+  delegate_to: localhost
+  tags: ["api_calls"]
+
+- name: Debug vc_folder variable
+  debug:
+    msg: "{{ vc_datastore }}"
+    verbosity: 2
+  tags: ["api_calls"] 
+
+#- name: Set var for datastore_id
+#  set_fact:
+#    folder_id: "{{ vc_folder.json }} | json_query([?'value[*].name' == {{ default_datastore }}].datastore)"
+#  tags: ["api_calls"]
 
 #- name: Get network_id
 #- name: Get host_id
