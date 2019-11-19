@@ -155,7 +155,7 @@
 
 - name: Debug host_id variable
   debug:
-    var: "{{ host_id }}"
+    msg: "{{ host_id.0 }}"
     verbosity: 2
   tags: ["api_calls","host_id"]
 
@@ -209,7 +209,7 @@
 
 - name: Get resource_pool_id
   uri:
-    url: https://{{ vcsa_dns_name }}/rest/vcenter/resource-pool?filter.names.1=Resources&filter.hosts.1={{ host_id }}
+    url: https://{{ vcsa_dns_name }}/rest/vcenter/resource-pool?filter.names.1=Resources&filter.hosts.1={{ host_id | first }}
     force_basic_auth: yes
     validate_certs: no
     headers:
@@ -246,7 +246,7 @@
     verbosity: 2
   tags: ["api_calls"] 
 
-- name: Set var for resource_pool_id
+- name: Set var for folder_id
   set_fact:
     folder_id: "{{ vc_folder.json.value[0].folder }}"
   tags: ["api_calls"]
