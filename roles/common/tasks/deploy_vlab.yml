@@ -148,7 +148,9 @@
 
 - name: Set var for host_id
   set_fact:
-    host_id: "{{vc_hosts.json | json_query(\"[?value[*].name == '\" + esx_address + \"'].host\") }}"
+    host_id: "{{vc_hosts.json | json_query(query) }}"
+  vars:
+    query: "value[?name=='{{esx_address}}'].host"
   tags: ["api_calls","host_id"]
 
 - name: Debug host_id variable
@@ -170,7 +172,7 @@
 
 - name: Debug vc_networks variable
   debug:
-    msg: "{{ vc_networks }}"
+    msg: "{{ vc_networks.json }}"
     verbosity: 2
   tags: ["api_calls"]
 
