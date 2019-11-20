@@ -16,13 +16,13 @@
 - name: template out deploy.json
   template:
     src: vesxi_api.json.j2
-    dest: api_vesxi{{ outer_item }}.json
+    dest: apivesxi{{ outer_item }}.json
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
 - name: Setting file path string for deployment later via lookup
   set_fact:
-    deploy_json: api_vesxi{{ outer_item }}.json
+    deploy_json: apivesxi{{ outer_item }}.json
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
