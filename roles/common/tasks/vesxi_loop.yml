@@ -23,7 +23,7 @@
 - name: Setting file path string for deployment later via lookup
   set_fact:
     deploy_json: api_vesxi{{ outer_item }}.json
-    delegate_to: localhost
+  delegate_to: localhost
   tags: ["deploy_vesxi"]
 
 - name: Debug deploy_json index
