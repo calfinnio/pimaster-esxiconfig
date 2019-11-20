@@ -95,7 +95,7 @@
       Cookie: "{{ login2.set_cookie }}"
     body_format: json
     #body: "{{ lookup('file', 'api1.json') }}"
-    src: api1.json
+    src: "{{ deploy_json }}"
     timeout: 999
     method: POST
   delegate_to: localhost
