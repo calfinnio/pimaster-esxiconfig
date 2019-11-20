@@ -93,7 +93,7 @@
     headers:
       Cookie: "{{ login2.set_cookie }}"
     body_format: json
-    body: "{{ lookup('file', 'api1.json') }}"
+    body: "{{ lookup('file', 'api1.json') | to_json }}"
     method: POST
   delegate_to: localhost
   tags: ["api_calls","deploy_vesxi"]
