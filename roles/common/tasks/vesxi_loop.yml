@@ -96,6 +96,7 @@
     body_format: json
     #body: "{{ lookup('file', 'api1.json') }}"
     src: api1.json
+    timeout: 999
     method: POST
   delegate_to: localhost
   tags: ["api_calls","deploy_vesxi"]
