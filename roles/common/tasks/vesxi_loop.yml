@@ -89,11 +89,12 @@
   uri:
     url: https://{{ vcsa_ip_addr }}/rest/com/vmware/vcenter/ovf/library-item/id:fc0c8c96-6969-46b3-86d0-ec7655852e78?~action=deploy
     force_basic_auth: yes
+    return_content: yes
     validate_certs: no
     headers:
       Cookie: "{{ login2.set_cookie }}"
     body_format: json
-    body: "{{ lookup('file', 'api1.json') | to_json }}"
+    body: "{{ lookup('file', 'api1.json')}}"
     method: POST
   delegate_to: localhost
   tags: ["api_calls","deploy_vesxi"]
