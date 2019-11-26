@@ -5,7 +5,7 @@ network_vars:
     default: True
 
 pfsense_vars:
- - vm_name: pfsense_test
+ - vm_name: pfsense
    wan_pg: "VM Network"
    wan_ip: 192.168.1.12
    lan_pg: pg_LabMgmt

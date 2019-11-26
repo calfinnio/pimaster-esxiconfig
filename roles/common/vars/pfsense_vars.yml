@@ -1,5 +1,5 @@
 ---
-pfsense_vm_name: pfsense_test
+pfsense_vm_name: pfsense
 pfsense_wan_pg: "VM Network"
 pfsense_wan_ip: 192.168.1.12
 pfsense_lan_pg: pg_LabMgmt
@@ -7,3 +7,5 @@ pfsense_lan_ip: 10.64.0.1
 pfsense_provision_mode: thin
 pfsense_ovftool_path: /vmfs/volumes/{{ default_nfs }}/vmware-ovftool/ovftool
 pfsense_ovf_path: /vmfs/volumes/{{ default_nfs }}/pfsense.ovf
+pfsense_new_config: false
+pfsense_config_path: /mnt/nfs/pimaster/config.xml

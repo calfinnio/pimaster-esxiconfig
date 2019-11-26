@@ -25,31 +25,31 @@
         },
         {
             "Key": "guestinfo.cis.appliance.net.addr",
-            "Value": {{ vcsa_ip_addr }}
+            "Value": "{{ vcsa_ip_addr }}"
         },
         {
             "Key": "guestinfo.cis.appliance.net.prefix",
-            "Value": {{ vcsa_ip_prefix }}
+            "Value": "{{ vcsa_ip_prefix }}"
         },
         {
             "Key": "guestinfo.cis.appliance.net.gateway",
-            "Value": {{ vcsa_gateway }}
+            "Value": "{{ vcsa_gateway }}"
         },
         {
             "Key": "guestinfo.cis.appliance.net.dns.servers",
-            "Value": {{ hostvars.pimaster.ansible_host }}
+            "Value": "{{ hostvars.pimaster.ansible_host }}"
         },
         {
             "Key": "guestinfo.cis.appliance.net.pnid",
-            "Value": {{ vcsa_dns_name }}
+            "Value": "{{ vcsa_dns_name }}"
         },
         {
             "Key": "guestinfo.cis.vmdir.password",
-            "Value": {{ esx_password }}
+            "Value": "{{ esx_password }}"
         },
         {
             "Key": "guestinfo.cis.appliance.root.passwd",
-            "Value": {{ esx_password }}
+            "Value": "{{ esx_password }}"
         },
         {
             "Key": "guestinfo.cis.deployment.node.type",
@@ -57,7 +57,7 @@
         },
         {
             "Key": "guestinfo.cis.vmdir.domain-name",
-            "Value": {{ vcsa_sso_domain }}
+            "Value": "{{ vcsa_sso_domain }}"
         },
         {
             "Key": "guestinfo.cis.deployment.autoconfig",
@@ -65,7 +65,7 @@
         },
         {
             "Key": "guestinfo.cis.vmdir.site-name",
-            "Value": {{ vcsa_site_name }}
+            "Value": "{{ vcsa_site_name }}"
         },
         {
             "Key": "guestinfo.cis.ceip_enabled",
@@ -81,7 +81,7 @@
         },
         {
             "Key": "guestinfo.cis.appliance.ntp.servers",
-            "Value": {{ vcsa_gateway }}
+            "Value": "{{ vcsa_gateway }}"
         },
         {
             "Key": "vami.domain.VMware-vCenter-Server-Appliance",
