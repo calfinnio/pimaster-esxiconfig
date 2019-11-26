@@ -92,20 +92,52 @@
   delegate_to: localhost
   tags: [ 'vcsa_template']
 
-- name: deploy VCSA
-  shell: govc import.ova -options={{ role_path }}/files/vcsa.json /mnt/usb/vcsa_iso/vcsa/VMware-vCenter-Server-Appliance-6.7.0.40000-14367737_OVF10.ova 
-  environment:
-    GOPATH: "{{ go_path }}"
-    PATH: "{{ go_bin }}"
-    GOVC_INSECURE: 1
-    GOVC_URL: "{{ esx_address }}"
-    GOVC_USERNAME: "{{ esx_user }}"
-    GOVC_PASSWORD: "{{ esx_password }}"
-    GOVC_DATASTORE: "{{ default_datastore }}"
-    GOVC_NETWORK: "{{ default_portgroup }}"
-    GOVC_RESOURCE_POOL: "*/Resources"
-  async: 3600
-  poll: 5
+#- name: deploy VCSA
+#  shell: govc import.ova -options={{ role_path }}/files/vcsa.json /mnt/usb/vcsa_iso/vcsa/VMware-vCenter-Server-Appliance-6.7.0.40000-14367737_OVF10.ova 
+#  environment:
+#    GOPATH: "{{ go_path }}"
+#    PATH: "{{ go_bin }}"
+#    GOVC_INSECURE: 1
+#    GOVC_URL: "{{ esx_address }}"
+#    GOVC_USERNAME: "{{ esx_user }}"
+#    GOVC_PASSWORD: "{{ esx_password }}"
+#    GOVC_DATASTORE: "{{ default_datastore }}"
+#    GOVC_NETWORK: "{{ default_portgroup }}"
+#    GOVC_RESOURCE_POOL: "*/Resources"
+#  async: 3600
+#  poll: 5
+#  when: vcsa_vm_name not in vms.dict
+#  delegate_to: localhost
+#  tags: ["vcsa_deploy"]
+
+- name: Deploy VCSA - ovftool
+  shell: >
+    "{{ pfsense_ovftool_path }} --acceptAllEulas --skipManifestCheck --X:injectOvfEnv 
+    --noSSLVerify --powerOn --name={{ vcsa_vm_name }} 
+    --X:logFile=/vmfs/volumes/{{ nfs_mount_name }}/ovftool.log 
+    -dm=thin -ds={{ default_datastore }}  
+    "--net:Network 1={{ default_portgroup }}"
+    --prop:guestinfo.cis.appliance.net.addr.family="ipv4"
+    --prop:guestinfo.cis.appliance.net.mode="static"
+    --prop:guestinfo.cis.appliance.net.addr="{{ vcsa_ip_addr }}"
+    --prop:guestinfo.cis.appliance.net.prefix="{{ vcsa_ip_prefix }}"
+    --prop:guestinfo.cis.appliance.net.gateway="{{ vcsa_gateway }}"
+    --prop:guestinfo.cis.appliance.net.dns.servers="{{ hostvars.pimaster.ansible_host }}"
+    --prop=guestinfo.cis.appliance.net.pnid="{{ vcsa_dns_name }}"
+    --prop:guestinfo.cis.vmdir.password="{{ esx_password }}"
+    --prop:guestinfo.cis.appliance.root.passwd="{{ esx_password }}"
+    --prop:guestinfo.cis.deployment.node.type="embedded"
+    --prop:guestinfo.cis.vmdir.domain-name="{{ vcsa_sso_domain }}"
+    --prop:guestinfo.cis.deployment.autoconfig="True"
+    --prop:guestinfo.cis.vmdir.site-name="{{ vcsa_site_name }}"
+    --prop:guestinfo.cis.ceip_enabled="True"
+    --prop:guestinfo.cis.appliance.root.shell="/bin/bash"
+    --prop:guestinfo.cis.appliance.ssh.enabled="True"
+    --prop:guestinfo.cis.appliance.ntp.servers="{{ vcsa_gateway }}"
+    --prop:vami.domain.VMware-vCenter-Server-Appliance="{{ vcsa_dns_domain }}"
+    --prop:vami.searchpath.VMware-vCenter-Server-Appliance="{{ vcsa_dns_domain }}"
+    "{{ vcsa_ova_path }}" 
+    \"vi://{{ esx_user }}:{{ esx_password }}@{{ esx_address }}\""
   when: vcsa_vm_name not in vms.dict
   delegate_to: localhost
   tags: ["vcsa_deploy"]
@@ -176,6 +208,7 @@
     GOVC_RESOURCE_POOL: "*/Resources"
   delegate_to: localhost
   tags: ["vms", "autostart"]
+  
 #- name: Include pfsense VM tasks
 #  include_tasks: pfsense.yml
 #  when: stvm.stdout == "0"
