@@ -6,11 +6,11 @@
     "IPProtocol": "IPv4",
     "InjectOvfEnv": true,
     "MarkAsTemplate": false,
-    "Name": {{ vcsa_vm_name }},
+    "Name": "{{ vcsa_vm_name }}",
     "NetworkMapping": [
         {
             "Name": "Network 1",
-            "Network": {{ vcsa_network }}
+            "Network": "{{ vcsa_network }}"
         }
     ],
     "PowerOn": true,
