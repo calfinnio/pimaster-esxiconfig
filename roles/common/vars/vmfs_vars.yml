@@ -5,3 +5,14 @@ vmfs_attribute: 0
 vmfs_device_path: /vmfs/devices/disks/
 vmfs_version: 6
 vmfs_name: General1
+vmfs_extra_datastores: false
+
+datastore_vars:
+  General1:
+    Path:
+  General2:
+    Path:
+  SSD1:
+    Path:
+  SSD2:
+    Path:
