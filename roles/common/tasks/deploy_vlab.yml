@@ -285,9 +285,14 @@
   delegate_to: localhost
   tags: ["api_calls"]
 
+- name: Set fact for Content Library
+  set_fact:
+    content_lib_ids_loop: "{{ content_lib_ids.json | dict2items }}"
+  tags: ["api_calls"]
+
 - name: Debug of Content library id json
   debug:
-    msg: "{{ content_lib_ids }}"
+    msg: "{{ content_lib_ids_loop }}"
     verbosity: 2
   tags: ["api_calls"]
 
@@ -308,7 +313,7 @@
     msg: "{{ content_lib_details }}"
     verbosity: 2
   tags: ["api_calls"]
-  
+
 - name: Set fact for required Content Library
   set_fact:
     content_lib_id: "{{content_lib_ids.json | json_query(query) }}"
