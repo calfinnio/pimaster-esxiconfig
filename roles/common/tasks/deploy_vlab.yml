@@ -303,7 +303,7 @@
     validate_certs: no
     headers:
       Cookie: "{{ login.set_cookie }}"
-  loop: content_lib_ids.json.value
+  loop: content_lib_ids_loop
   register: content_lib_details
   delegate_to: localhost
   tags: ["api_calls"] 
