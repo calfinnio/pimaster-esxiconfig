@@ -116,14 +116,14 @@
     --noSSLVerify --powerOn --name={{ vcsa_vm_name }}
     --X:logFile=/vmfs/volumes/{{ nfs_mount_name }}/ovftool.log
     -dm=thin -ds={{ default_datastore }}
-    "--net:Network 1={{ default_portgroup }}"
+    --net:'Network 1={{ default_portgroup }}'
     --prop:guestinfo.cis.appliance.net.addr.family="ipv4"
     --prop:guestinfo.cis.appliance.net.mode="static"
     --prop:guestinfo.cis.appliance.net.addr="{{ vcsa_ip_addr }}"
     --prop:guestinfo.cis.appliance.net.prefix="{{ vcsa_ip_prefix }}"
     --prop:guestinfo.cis.appliance.net.gateway="{{ vcsa_gateway }}"
     --prop:guestinfo.cis.appliance.net.dns.servers="{{ hostvars.pimaster.ansible_host }}"
-    --prop=guestinfo.cis.appliance.net.pnid="{{ vcsa_dns_name }}"
+    --prop:guestinfo.cis.appliance.net.pnid="{{ vcsa_dns_name }}"
     --prop:guestinfo.cis.vmdir.password="{{ esx_password }}"
     --prop:guestinfo.cis.appliance.root.passwd="{{ esx_password }}"
     --prop:guestinfo.cis.deployment.node.type="embedded"
@@ -137,7 +137,7 @@
     --prop:vami.domain.VMware-vCenter-Server-Appliance="{{ vcsa_dns_domain }}"
     --prop:vami.searchpath.VMware-vCenter-Server-Appliance="{{ vcsa_dns_domain }}"
     "{{ vcsa_ova_path }}"
-    \"vi://{{ esx_user }}:{{ esx_password }}@{{ esx_address }}\""
+    "vi://{{ esx_user }}:{{ esx_password }}@{{ esx_address }}"
   when: vcsa_vm_name not in vms.dict
   delegate_to: localhost
   tags: ["vcsa_deploy"]
