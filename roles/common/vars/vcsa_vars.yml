@@ -11,4 +11,4 @@ vcsa_username: administrator
 vcsa_sso_domain: vsphere.local
 vcsa_site_name: Site01
 vcsa_dc_name: HomeLab
-vcsa_ova_path: /vmfs/volumes/{{ default_nfs }}/VMware-vCenter-Server-Appliance-6.7.0.40000-14367737_OVF10.ova
+vcsa_ova_path: /vmfs/volumes/{{ default_nfs }}/vcsa/VMware-vCenter-Server-Appliance-6.7.0.40000-14367737_OVF10.ova
