@@ -210,14 +210,14 @@
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
   register: content_libraries_raw
-  when: count_content_libraries != 0
+  when: count_content_libraries != "0"
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
 - name: Set dummy content library list
   set_fact:
     content_libraries: "{{ content_libraries.stdout }}"
-  when: count_content_libraries != 0
+  when: count_content_libraries != "0"
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
