@@ -261,7 +261,7 @@
 #- name: Get datastore_id
 
 - name: Get Library id
-  shell: govc library.ls -json | /usr/bin/jq .
+  shell: govc library.ls -json | /usr/bin/jq -r .
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
