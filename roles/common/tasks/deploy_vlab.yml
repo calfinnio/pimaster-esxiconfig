@@ -203,6 +203,7 @@
 - name: Set var for datastore_id
   set_fact:
     datastore_id: "{{ vc_datastore.json.value.0.datastore }}"
+
   tags: ["api_calls"]
 
 - name: Get resource_pool_id
@@ -258,6 +259,36 @@
 #- name: Get folder_id
 #- name: Get resource_pool_id
 #- name: Get datastore_id
+
+- name: Get Library id
+  shell: govc library.ls -json | /usr/bin/jq .
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  register: content_lib_ids_json
+  delegate_to: localhost
+  tags: ["api_calls"]
+
+- name: Set fact for required Content Library
+  set_fact:
+    content_lib_id: "{{content_lib_ids_json.json | json_query(query) }}"
+  vars:
+    query: "value[?name=='{{content_library_name}}'].id"
+  tags: ["api_calls"]
+
+- name: Debug of Content library id
+  debug:
+    msg: "{{ content_lib_id }}"
+  tags: ["api_calls"]
+
+#- name: Get Library items
+#- name: loop library items to find matching name
+#- name: set_fact for Library item id
 
 - name: deploy vesxi
   include_tasks: vesxi_loop.yml
