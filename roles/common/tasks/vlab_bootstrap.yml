@@ -186,6 +186,12 @@
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
+- name: debug of count_content_libraries
+  debug:
+    msg: "{{ count_content_libraries }}"
+    verbosity: 2
+  tags: ["vlab-bootstrap"]
+
 - name: Set dummy content library list
   set_fact:
     content_libraries: "zero"
