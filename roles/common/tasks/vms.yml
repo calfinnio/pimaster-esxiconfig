@@ -111,7 +111,7 @@
 #  tags: ["vcsa_deploy"]
 
 - name: Deploy VCSA - ovftool
-  shell: >
+  command: >
     "{{ pfsense_ovftool_path }} --acceptAllEulas --skipManifestCheck --X:injectOvfEnv
     --noSSLVerify --powerOn --name={{ vcsa_vm_name }}
     --X:logFile=/vmfs/volumes/{{ nfs_mount_name }}/ovftool.log
