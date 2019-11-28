@@ -136,8 +136,7 @@
     --prop:guestinfo.cis.appliance.ntp.servers={{ vcsa_gateway }}
     --prop:vami.domain.VMware-vCenter-Server-Appliance={{ vcsa_dns_domain }}
     --prop:vami.searchpath.VMware-vCenter-Server-Appliance={{ vcsa_dns_domain }}
-    "{{ vcsa_ova_path }}"
-    vi://{{ esx_user }}:{{ esx_password }}@{{ esx_address }}"
+    "{{ vcsa_ova_path }}" \"vi://{{ esx_user }}:{{ esx_password }}@{{ esx_address }}\""
   when: vcsa_vm_name not in vms.dict
   tags: ["vcsa_deploy"]
 
