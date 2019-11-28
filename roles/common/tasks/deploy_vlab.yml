@@ -291,6 +291,24 @@
     verbosity: 2
   tags: ["api_calls"]
 
+- name: Loop over content_lib_ids to get required lib
+  uri:
+    url: https://{{ vcsa_dns_name }}/rest/com/vmware/content/library/id:{{ item }}
+    force_basic_auth: yes
+    validate_certs: no
+    headers:
+      Cookie: "{{ login.set_cookie }}"
+  loop: content_lib_ids.json.value
+  register: content_lib_details
+  delegate_to: localhost
+  tags: ["api_calls"] 
+
+- name: Debug for loop over content libs
+  debug:
+    msg: "{{ content_lib_details }}"
+    verbosity: 2
+  tags: ["api_calls"]
+  
 - name: Set fact for required Content Library
   set_fact:
     content_lib_id: "{{content_lib_ids.json | json_query(query) }}"
