@@ -276,7 +276,7 @@
 
 - name: Debug of Content library id json
   debug:
-    msg: "{{ content_lib_ids_json | from_json }}"
+    msg: "{{ content_lib_ids_json.stdout | from_json }}"
     verbosity: 2
   tags: ["api_calls"]
 
