@@ -170,7 +170,7 @@
     GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
-  register: count_content_libraries
+  register: count_content_libraries_string
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
@@ -181,8 +181,14 @@
 
 - name: Set dummy content library list
   set_fact:
-    content_libraries: zero
-  when: count_content_libraries.stdout == 0
+    count_content_libraries: "{{ count_content_libraries_string.stdout | int }}"
+  delegate_to: localhost
+  tags: ["vlab-bootstrap"]
+
+- name: Set dummy content library list
+  set_fact:
+    content_libraries: "zero"
+  when: count_content_libraries == 0
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
@@ -197,14 +203,14 @@
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
   register: content_libraries_raw
-  when: count_content_libraries.stdout != 0
+  when: count_content_libraries != 0
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
 - name: Set dummy content library list
   set_fact:
     content_libraries: "{{ content_libraries.stdout }}"
-  when: count_content_libraries.stdout != 0
+  when: count_content_libraries != 0
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
