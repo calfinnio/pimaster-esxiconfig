@@ -160,6 +160,27 @@
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
+- name: Check for existing content libraries
+  shell: govc library.ls -json | wc -l
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  register: count_content_libraries
+  delegate_to: localhost
+  tags: ["vlab-bootstrap"]
+
+- name: Set dummy content library list
+  set_fact:
+    content_libraries: zero
+  when: count_content_libraries == 0
+  delegate_to: localhost
+  tags: ["vlab-bootstrap"]
+
 - name: Get content libraries
   shell: govc library.ls -json | /usr/bin/jq -r .[].name
   environment:
@@ -170,7 +191,15 @@
     GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
-  register: content_libraries
+  register: content_libraries_raw
+  when: count_content_libraries != 0
+  delegate_to: localhost
+  tags: ["vlab-bootstrap"]
+
+- name: Set dummy content library list
+  set_fact:
+    content_libraries: "{{ content_libraries.stdout }}"
+  when: count_content_libraries != 0
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
