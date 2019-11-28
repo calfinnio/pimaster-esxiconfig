@@ -112,10 +112,16 @@
 
 - name: Deploy VCSA - ovftool
   command: >
-    "{{ pfsense_ovftool_path }} --acceptAllEulas --skipManifestCheck --X:injectOvfEnv
-    --noSSLVerify --powerOn --name={{ vcsa_vm_name }}
+    {{ pfsense_ovftool_path }} 
+    --acceptAllEulas 
+    --skipManifestCheck 
+    --X:injectOvfEnv
+    --noSSLVerify 
+    --powerOn 
+    --name={{ vcsa_vm_name }}
     --X:logFile=/vmfs/volumes/{{ nfs_mount_name }}/ovftool.log
-    -dm=thin -ds={{ default_datastore }}
+    -dm=thin 
+    -ds={{ default_datastore }}
     --net:'Network 1={{ default_portgroup }}'
     --prop:guestinfo.cis.appliance.net.addr.family="ipv4"
     --prop:guestinfo.cis.appliance.net.mode="static"
@@ -136,7 +142,8 @@
     --prop:guestinfo.cis.appliance.ntp.servers={{ vcsa_gateway }}
     --prop:vami.domain.VMware-vCenter-Server-Appliance={{ vcsa_dns_domain }}
     --prop:vami.searchpath.VMware-vCenter-Server-Appliance={{ vcsa_dns_domain }}
-    "{{ vcsa_ova_path }}" \"vi://{{ esx_user }}:{{ esx_password }}@{{ esx_address }}\""
+    {{ vcsa_ova_path }} 
+    vi://'{{ esx_user }}'':'{{ esx_password }}'@{{ esx_address }}
   when: vcsa_vm_name not in vms.dict
   tags: ["vcsa_deploy"]
 
