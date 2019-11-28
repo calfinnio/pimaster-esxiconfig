@@ -180,7 +180,7 @@
     verbosity: 2
   tags: ["vlab-bootstrap"]
 
-- name: Set dummy content library list
+- name: Set count content library 
   set_fact:
     count_content_libraries: "{{ count_content_libraries_string.stdout | int }}"
   delegate_to: localhost
@@ -195,7 +195,7 @@
 - name: Set dummy content library list
   set_fact:
     content_libraries: "zero"
-  when: count_content_libraries == 0
+  when: count_content_libraries == "0"
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
 
