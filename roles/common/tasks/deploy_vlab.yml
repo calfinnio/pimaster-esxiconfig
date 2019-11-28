@@ -260,29 +260,40 @@
 #- name: Get resource_pool_id
 #- name: Get datastore_id
 
-- name: Get Library id
-  shell: govc library.ls -json | /usr/bin/jq -r .
-  environment:
-    GOPATH: "{{ go_path }}"
-    PATH: "{{ go_bin }}"
-    GOVC_INSECURE: 1
-    GOVC_URL: "{{ vcsa_dns_name }}"
-    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
-    GOVC_PASSWORD: "{{ esx_password }}"
-    GOVC_RESOURCE_POOL: "*/Resources"
-  register: content_lib_ids_json
+#- name: Get Library id
+#  shell: govc library.ls -json | /usr/bin/jq -r .
+#  environment:
+#    GOPATH: "{{ go_path }}"
+#    PATH: "{{ go_bin }}"
+#    GOVC_INSECURE: 1
+#    GOVC_URL: "{{ vcsa_dns_name }}"
+#    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+#    GOVC_PASSWORD: "{{ esx_password }}"
+#    GOVC_RESOURCE_POOL: "*/Resources"
+#  register: content_lib_ids_json
+#  delegate_to: localhost
+#  tags: ["api_calls"]
+
+- name: Get library_id
+  uri:
+    url: https://{{ vcsa_dns_name }}/rest/com/vmware/content/library
+    force_basic_auth: yes
+    validate_certs: no
+    headers:
+      Cookie: "{{ login.set_cookie }}"
+  register: content_library_ids
   delegate_to: localhost
   tags: ["api_calls"]
 
 - name: Debug of Content library id json
   debug:
-    msg: "{{ content_lib_ids_json.stdout | from_json }}"
+    msg: "{{ content_lib_ids }}"
     verbosity: 2
   tags: ["api_calls"]
 
 - name: Set fact for required Content Library
   set_fact:
-    content_lib_id: "{{content_lib_ids_json.stdout | from_json | json_query(query) }}"
+    content_lib_id: "{{content_lib_ids.json | json_query(query) }}"
   vars:
     query: "value[?name=='{{content_library_name}}'].id"
   tags: ["api_calls"]
