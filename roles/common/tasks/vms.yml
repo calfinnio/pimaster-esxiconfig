@@ -120,8 +120,8 @@
     --powerOn 
     --name={{ vcsa_vm_name }}
     --X:logFile=/vmfs/volumes/{{ nfs_mount_name }}/ovftool.log
-    -dm=thin 
-    -ds={{ default_datastore }}
+    --diskMode=thin 
+    --datastore={{ default_datastore }}
     --net:'Network 1={{ default_portgroup }}'
     --prop:guestinfo.cis.appliance.net.addr.family="ipv4"
     --prop:guestinfo.cis.appliance.net.mode="static"
