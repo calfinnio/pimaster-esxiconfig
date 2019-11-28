@@ -176,7 +176,8 @@
 
 - name: debug of count_content_libraries
   debug:
-    msg: "{{ count_content_libraries }}"
+    msg: "{{ count_content_libraries_string }}"
+    verbosity: 2
   tags: ["vlab-bootstrap"]
 
 - name: Set dummy content library list
