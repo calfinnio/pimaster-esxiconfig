@@ -281,7 +281,7 @@
     validate_certs: no
     headers:
       Cookie: "{{ login.set_cookie }}"
-  register: content_library_ids
+  register: content_lib_ids
   delegate_to: localhost
   tags: ["api_calls"]
 
