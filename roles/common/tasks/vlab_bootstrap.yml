@@ -161,7 +161,7 @@
   tags: ["vlab-bootstrap"]
 
 - name: Check for existing content libraries
-  shell: govc library.ls -json | /usr/bin/wc -l
+  shell: govc library.ls | /usr/bin/wc -l
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
