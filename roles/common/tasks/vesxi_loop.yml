@@ -98,7 +98,7 @@
     src: "{{ deploy_json }}"
     timeout: 999
     method: POST
-  ignore_errors: yes
+  when: current_vm not in current_vms
   delegate_to: localhost
   tags: ["api_calls","deploy_vesxi"]
 #  https://{{vc}}/rest/com/vmware/vcenter/ovf/library-item/id:fc0c8c96-6969-46b3-86d0-ec7655852e78?~action=deploy
