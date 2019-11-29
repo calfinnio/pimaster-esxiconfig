@@ -216,7 +216,7 @@
 
 - name: Set dummy content library list
   set_fact:
-    content_libraries: "{{ content_libraries.stdout }}"
+    content_libraries: "{{ content_libraries_raw.stdout }}"
   when: count_content_libraries != "0"
   delegate_to: localhost
   tags: ["vlab-bootstrap"]
