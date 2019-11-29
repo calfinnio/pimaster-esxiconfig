@@ -96,6 +96,18 @@
     verbosity: 2
   tags: ["deploy_vesxi"]
 
+- name: Check whether DNS "record" exists
+  command: grep -Fxq {{ dns_string }} /etc/dnsmasq_static_hosts.conf
+  register: check_dns_record
+  check_mode: no
+  ignore_errors: yes
+  changed_when: no
+
+- name: Greet the world if DNS "record" exists
+  debug: 
+    msg: "Hello, world!"
+  when: check_dns_record.rc == 0
+  
 - name: Deploy Library Item via api
   uri:
     url: https://{{ vcsa_ip_addr }}/rest/com/vmware/vcenter/ovf/library-item/id:{{ content_lib_item_id[0] }}?~action=deploy
