@@ -85,6 +85,17 @@
   delegate_to: localhost
   tags: ["api_calls","host_id"]
 
+- name: set dns string for host
+  set_fact:
+    dns_string: "{{ current_ip + ' ' + current_name + '.' + vcsa_dns_domain }}"
+  tags: ["deploy_vesxi"]
+
+- name: debug dns string
+  debug:
+    msg: "{{ dns_string }}"
+    verbosity: 2
+  tags: ["deploy_vesxi"]
+
 - name: Deploy Library Item via api
   uri:
     url: https://{{ vcsa_ip_addr }}/rest/com/vmware/vcenter/ovf/library-item/id:{{ content_lib_item_id[0] }}?~action=deploy
