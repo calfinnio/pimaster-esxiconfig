@@ -388,7 +388,7 @@
 
 - name: Get dict of item ids and names only
   set_fact:
-    json_lib_item_results: "{{ json_results|default([]) + [ {'name': item.json.value.name, 'id': item.item} ] }}"
+    json_lib_item_results: "{{ json_lib_item_results|default([]) + [ {'name': item.json.value.name, 'id': item.item} ] }}"
   loop: "{{ content_lib_item_details.results }}"
   tags: ["api_calls2"]
 
