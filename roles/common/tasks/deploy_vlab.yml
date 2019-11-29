@@ -1,20 +1,20 @@
 ---
 - name: Include vesxi vars
   include_vars: vesxi_vars.yml
-  tags: ["deploy_vesxi","api_calls","host_id"]
+  tags: ["deploy_vesxi","api_calls","host_id", "api_calls2"]
 
 - name: Include secrets
   include_vars: 
     file: secrets_physical_esx.yml
-  tags: ["deploy_vesxi","api_calls","host_id"]
+  tags: ["deploy_vesxi","api_calls","host_id", "api_calls2"]
 
 - name: Include vcsa connection vars
   include_vars: vcsa_vars.yml
-  tags: ["deploy_vesxi","api_calls","host_id"]
+  tags: ["deploy_vesxi","api_calls","host_id", "api_calls2"]
 
 - name: Include content library vars
   include_vars: content_library_vars.yml
-  tags: ["deploy_vesxi","api_calls","host_id"]
+  tags: ["deploy_vesxi","api_calls","host_id", "api_calls2"]
 
 - name: Generate list for number of hosts
   set_fact:
@@ -122,7 +122,7 @@
     password: "{{ esx_password }}"
   register: login
   delegate_to: localhost
-  tags: ["api_calls","host_id"]
+  tags: ["api_calls","host_id", "api_calls2"]
 
 - name: Get all hosts from vCenter using cookies
   uri:
@@ -283,18 +283,20 @@
       Cookie: "{{ login.set_cookie }}"
   register: content_lib_ids
   delegate_to: localhost
-  tags: ["api_calls"]
+  tags: ["api_calls", "api_calls2"]
 
 - name: Set fact for Content Library
   set_fact:
-    content_lib_ids_loop: "{{ content_lib_ids.json.value | from_json }}"
-  tags: ["api_calls"]
+    content_lib_ids_loop: "{{content_lib_ids.json | json_query(query) }}"
+  vars:
+    query: "value[*]"
+  tags: ["api_calls", "api_calls2"]
 
 - name: Debug of Content library id json
   debug:
-    var: "{{ content_lib_ids_loop }}"
+    msg: "{{ content_lib_ids_loop }}"
     verbosity: 2
-  tags: ["api_calls"]
+  tags: ["api_calls", "api_calls2"]
 
 - name: Loop over content_lib_ids to get required lib
   uri:
@@ -306,26 +308,37 @@
   loop: "{{ content_lib_ids_loop }}"
   register: content_lib_details
   delegate_to: localhost
-  tags: ["api_calls"] 
+  tags: ["api_calls", "api_calls2"] 
 
-- name: Debug for loop over content libs
+#- name: Debug for loop over content libs
+#  debug:
+#    msg: "{{ content_lib_details.results.json }}"
+#    verbosity: 2
+#  tags: ["api_calls", "api_calls2"]
+
+- name: Get correct id
+  set_fact:
+    json_results: "{{ json_results|default([]) + [ {'name': item.json.value.name, 'id': item.item} ] }}"
+  loop: "{{ content_lib_details.results }}"
+  tags: ["api_calls2"]
+
+- name: debug new loop 
   debug:
-    msg: "{{ content_lib_details }}"
-    verbosity: 2
-  tags: ["api_calls"]
+    msg: "{{ json_results }}"
+  tags: ["api_calls2"]
 
 - name: Set fact for required Content Library
   set_fact:
-    content_lib_id: "{{content_lib_ids.json | json_query(query) }}"
+    content_lib_id: "{{ json_results | json_query(query) }}"
   vars:
-    query: "value[?name=='{{content_library_name}}'].id"
-  tags: ["api_calls"]
+    query: "[?name=='{{content_library_name}}'].id"
+  tags: ["api_calls", "api_calls2"]
 
 - name: Debug of Content library id
   debug:
     msg: "{{ content_lib_id }}"
     verbosity: 2
-  tags: ["api_calls"]
+  tags: ["api_calls", "api_calls2"]
 
 #- name: Get Library items
 #- name: loop library items to find matching name
