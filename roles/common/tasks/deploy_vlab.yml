@@ -357,6 +357,17 @@
     verbosity: 2
   tags: ["api_calls", "api_calls2"]
 
+- name: Set fact for library items
+  set_fact:
+    content_lib_items_list: "{{ content_lib_items.json.value }}"
+  tags: ["api_calls", "api_calls2"]
+
+- name: Debug of Content library items list
+  debug:
+    msg: "{{ content_lib_items_list }}"
+    verbosity: 2
+  tags: ["api_calls", "api_calls2"]
+
 #- name: loop library items to find matching name
 #- name: set_fact for Library item id
 
