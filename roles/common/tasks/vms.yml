@@ -56,13 +56,11 @@
 
 - name: Get VMs
   shell: esxcli --formatter=csv vm process list > /tmp/vms.csv
-  when: count_vms_local != "0"
   tags: ["pre_vms", "vms"]
 
 - name: stat file to check it is not zero
   shell: wc -c /tmp/vms.csv  | awk '{print $1}'
   register: stvm
-  when: count_vms_local != "0"
   tags: ["vms"]
 
 - name: Read CSV
