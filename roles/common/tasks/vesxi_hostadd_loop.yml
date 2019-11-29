@@ -1,0 +1,42 @@
+---
+- name: IP to check
+  set_fact:
+    current_ip: "{{ vesxi_starting_ip|ipmath(ansible_loop.index0) }}"
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
+
+- name: Ping vesxi and wait until success
+  command: /bin/ping -c 1 {{ current_ip }}
+  register: result
+  retries: 150
+  delay: 10
+  until: result is not failed
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
+
+- name: Pause play until vesxi/ui URL is reachable from this host
+  uri:
+    url: "http://{{ current_ip }}/ui"
+    follow_redirects: all
+    method: GET
+    validate_certs: no
+  register: _result
+  until: _result.status == 200
+  retries: 720 # 720 * 5 seconds = 1hour (60*60/5)
+  delay: 5 # Every 5 seconds
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
+
+- name: Add physical host to datacenter
+  shell: govc host.add -hostname={{ current_ip }} -password={{ esx_password }} -username={{ esx_user }} -dc={{ vcsa_dc_name }} -noverify=true
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ vcsa_dns_name }}"
+    GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  when: current_ip not in ip_results
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
