@@ -108,7 +108,7 @@
 - name: Greet the world if DNS "record" exists
   debug: 
     msg: "Hello, world!"
-  when: check_dns_record.rc == 0
+  when: check_dns_record.rc != 0
   delegate_to: localhost
   tags: ["deploy_vesxi"]
   
