@@ -392,6 +392,12 @@
   loop: "{{ content_lib_item_details.results }}"
   tags: ["api_calls2"]
 
+- name: Debug of json_lib_item_results
+  debug:
+    msg: "{{ json_lib_item_results }}"
+    verbosity: 2
+  tags: ["api_calls", "api_calls2"]
+
 - name: Set fact for required Content Library
   set_fact:
     content_lib_item_id: "{{ json_lib_item_results | json_query(query) }}"
