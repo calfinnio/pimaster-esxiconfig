@@ -368,6 +368,24 @@
     verbosity: 2
   tags: ["api_calls", "api_calls2"]
 
+- name: Loop over content_lib_items_list to get required item id
+  uri:
+    url: https://{{ vcsa_dns_name }}/rest/com/vmware/content/library/item/id:{{ item }}
+    force_basic_auth: yes
+    validate_certs: no
+    headers:
+      Cookie: "{{ login.set_cookie }}"
+  loop: "{{ content_lib_items_list }}"
+  register: content_lib_item_details
+  delegate_to: localhost
+  tags: ["api_calls", "api_calls2"] 
+
+- name: Debug of Content library items details
+  debug:
+    msg: "{{ content_lib_item_details }}"
+    verbosity: 2
+  tags: ["api_calls", "api_calls2"]
+
 #- name: loop library items to find matching name
 #- name: set_fact for Library item id
 
