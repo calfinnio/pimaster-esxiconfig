@@ -48,6 +48,6 @@
     GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
     GOVC_PASSWORD: "{{ esx_password }}"
     GOVC_RESOURCE_POOL: "*/Resources"
-  when: current_name not in vm_results or dns_hostname_string not in hostnames
+  when: (current_name not in vm_results) or (dns_hostname_string not in hostnames)
   delegate_to: localhost
   tags: ["deploy_vesxi"]
