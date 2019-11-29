@@ -111,14 +111,16 @@
     line: "{{ dns_string }}"
     state: present
   when: check_dns_record.rc != 0
+  become: yes
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
-- name: REstart dnsmasq
+- name: Restart dnsmasq
   service:
     name: dnsmasq
     state: restarted
   when: check_dns_record.rc != 0
+  become: yes
   delegate_to: localhost
   tags: ["deploy_vesxi"]
   
