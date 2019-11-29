@@ -287,7 +287,7 @@
 
 - name: Set fact for Content Library
   set_fact:
-    content_lib_ids_loop: "{{ content_lib_ids.json.value }}"
+    content_lib_ids_loop: "{{ content_lib_ids.json.value | from_json }}"
   tags: ["api_calls"]
 
 - name: Debug of Content library id json
@@ -303,7 +303,7 @@
     validate_certs: no
     headers:
       Cookie: "{{ login.set_cookie }}"
-  loop: content_lib_ids_loop
+  loop: "{{ content_lib_ids_loop , wantlist=True }}
   register: content_lib_details
   delegate_to: localhost
   tags: ["api_calls"] 
