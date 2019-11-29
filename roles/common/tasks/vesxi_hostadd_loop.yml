@@ -14,6 +14,17 @@
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
+- name: VM name to check
+  set_fact:
+    current_name: "{{ vesxi_basename }}{{ ansible_loop.index}}"
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
+
+- name: set dns string for host
+  set_fact:
+    dns_hostname_string: "{{ current_name + '.' + vcsa_dns_domain }}"
+  tags: ["deploy_vesxi"]
+
 - name: Pause play until vesxi/ui URL is reachable from this host
   uri:
     url: "http://{{ current_ip }}/ui"
@@ -28,7 +39,7 @@
   tags: ["deploy_vesxi"]
 
 - name: Add physical host to datacenter
-  shell: govc host.add -hostname={{ current_ip }} -password={{ esx_password }} -username={{ esx_user }} -dc={{ vcsa_dc_name }} -noverify=true
+  shell: govc host.add -hostname={{ dns_hostname_string }} -password={{ esx_password }} -username={{ esx_user }} -dc={{ vcsa_dc_name }} -noverify=true
   environment:
     GOPATH: "{{ go_path }}"
     PATH: "{{ go_bin }}"
