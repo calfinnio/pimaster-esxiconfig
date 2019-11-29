@@ -87,7 +87,7 @@
 
 - name: Deploy Library Item via api
   uri:
-    url: https://{{ vcsa_ip_addr }}/rest/com/vmware/vcenter/ovf/library-item/id:fc0c8c96-6969-46b3-86d0-ec7655852e78?~action=deploy
+    url: https://{{ vcsa_ip_addr }}/rest/com/vmware/vcenter/ovf/library-item/id:{{ content_lib_item_id[0] }}?~action=deploy
     force_basic_auth: yes
     return_content: yes
     validate_certs: no
