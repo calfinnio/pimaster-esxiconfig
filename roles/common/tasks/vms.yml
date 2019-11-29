@@ -8,10 +8,34 @@
   include_vars: nfs-vars.yml
   tags: ["vms"]
 
+- name: Get VMs on host
+  shell: govc find . -type m  | /usr/bin/wc -l
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ esx_address }}"
+    GOVC_USERNAME: "{{ esx_user }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_DATASTORE: "{{ default_datastore }}"
+    GOVC_NETWORK: "{{ default_portgroup }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  delegate_to: localhost
+  register: esx1_vms_count
+  tags: ["vms"]
+
+- name: Set count of vms on physical esxi host
+  set_fact:
+    count_vms_local: "{{ esx1_vms_count.stdout | int }}"
+  delegate_to: localhost
+  tags: ["vms"]
+
+
 - name: Hacky fix for VM creation - generate guid
   shell: dbus-uuidgen | cut -c 1-12
   register: guid
   delegate_to: localhost
+  when: count_vms_local == "0"
   tags: ["vms"]
   
 - name: deploy dummy vm (Hacky fix)
@@ -27,15 +51,18 @@
     GOVC_NETWORK: "{{ default_portgroup }}"
     GOVC_RESOURCE_POOL: "*/Resources"
   delegate_to: localhost
+  when: count_vms_local == "0"
   tags: ["vms"]
 
 - name: Get VMs
   shell: esxcli --formatter=csv vm process list > /tmp/vms.csv
+  when: count_vms_local != "0"
   tags: ["pre_vms", "vms"]
 
 - name: stat file to check it is not zero
   shell: wc -c /tmp/vms.csv  | awk '{print $1}'
   register: stvm
+  when: count_vms_local != "0"
   tags: ["vms"]
 
 - name: Read CSV
@@ -65,6 +92,7 @@
     GOVC_NETWORK: "{{ default_portgroup }}"
     GOVC_RESOURCE_POOL: "*/Resources"
   delegate_to: localhost
+  when: count_vms_local == "0"
   tags: ["vms"]
 
 - name: Include pfsense vars
