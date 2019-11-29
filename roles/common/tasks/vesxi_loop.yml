@@ -106,7 +106,7 @@
   tags: ["deploy_vesxi"]
 
 - name: Add DNS "record" if it doesn't exist
-  linefile:
+  lineinfile:
     path: /etc/dnsmasq_static_hosts.conf
     line: "{{ dns_string }}"
     state: present
