@@ -386,6 +386,25 @@
     verbosity: 2
   tags: ["api_calls", "api_calls2"]
 
+- name: Get dict of item ids and names only
+  set_fact:
+    json_lib_item_results: "{{ json_results|default([]) + [ {'name': item.json.value.name, 'id': item.item} ] }}"
+  loop: "{{ content_lib_item_details.results }}"
+  tags: ["api_calls2"]
+
+- name: Set fact for required Content Library
+  set_fact:
+    content_lib_item_id: "{{ json_lib_item_results | json_query(query) }}"
+  vars:
+    query: "[?name=='{{vesxi_ovf_name}}'].id"
+  tags: ["api_calls", "api_calls2"]
+
+- name: Debug of Content library items details
+  debug:
+    msg: "{{ content_lib_item_id }}"
+    verbosity: 2
+  tags: ["api_calls", "api_calls2"]
+
 #- name: loop library items to find matching name
 #- name: set_fact for Library item id
 
