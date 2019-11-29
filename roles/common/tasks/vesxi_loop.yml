@@ -105,9 +105,19 @@
   delegate_to: localhost
   tags: ["deploy_vesxi"]
 
-- name: Greet the world if DNS "record" exists
-  debug: 
-    msg: "Hello, world!"
+- name: Add DNS "record" if it doesn't exist
+  linefile:
+    path: /etc/dnsmasq_static_hosts.conf
+    line: "{{ dns_string }}"
+    state: present
+  when: check_dns_record.rc != 0
+  delegate_to: localhost
+  tags: ["deploy_vesxi"]
+
+- name: REstart dnsmasq
+  service:
+    name: dnsmasq
+    state: restarted
   when: check_dns_record.rc != 0
   delegate_to: localhost
   tags: ["deploy_vesxi"]
