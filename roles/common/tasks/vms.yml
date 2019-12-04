@@ -134,6 +134,13 @@
   delegate_to: localhost
   tags: ["pfsense"]
 
+- name: Another way to call 
+  known_hosts:
+    hostname: "{{ hostvars.pfsense.ansible_host }}"
+    state: present
+  delegate_to: localhost
+  tags: ["pfsense_post"]
+
 - name: Copy config to pfsense
   local_action: command scp /mnt/usb/nfs/config.xml {{ hostvars.pfsense.ansible_host }}:/conf/config.xml
   when: pfsense_new_config|bool == true
