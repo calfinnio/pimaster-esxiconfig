@@ -98,10 +98,47 @@
   tags: ["pfsense"]
 
 - name: Deploy pfsense OVF
-  command: "{{ pfsense_ovftool_path }} --acceptAllEulas --noSSLVerify --name={{ pfsense_vm_name }} --X:logFile=/vmfs/volumes/{{ nfs_mount_name }}/ovftool.log -dm={{ pfsense_provision_mode }} -ds={{ default_datastore }} --powerOn {{ pfsense_ovf_path }} \"vi://{{ esx_user }}:{{ esx_password }}@{{ esx_address }}\""
+  command: >
+    "{{ pfsense_ovftool_path }}"
+    --acceptAllEulas
+    --skipManifestCheck
+    --noSSLVerify
+    --name={{ pfsense_vm_name }}
+    --X:logFile=/vmfs/volumes/{{ nfs_mount_name }}/ovftool.log
+    --diskMode={{ pfsense_provision_mode }}
+    --datastore={{ default_datastore }}
+    --powerOn
+    "{{ pfsense_ovftool_path }}"
+    vi://'{{ esx_user }}':'{{ esx_password }}'@{{ esx_address }}
   when: pfsense_vm_name not in vms.dict
   tags: ["pfsense"]
 
+- name: Wait for ping to pfsense
+  command: /bin/ping -c 1 {{ pfsense_wan_ip }}
+  register: result
+  retries: 150
+  delay: 10
+  until: result is not failed
+  delegate_to: localhost
+  tags: ["pfsense"]
+
+- name: Wait for UI load
+  uri:
+    url: "http://{{ pfsense_wan_ip }}"
+    follow_redirects: all
+    method: GET
+    validate_certs: no
+  register: _result
+  until: _result.status == 200
+  retries: 720 # 720 * 5 seconds = 1hour (60*60/5)
+  delay: 5 # Every 5 seconds
+  delegate_to: localhost
+  tags: ["pfsense"]
+
+#- name: Mount nfs
+#  
+#- name: Copy file
+#- name: Reboot
 - name: Include vcsa vars
   include_vars: vcsa_vars.yml
   tags: ["vcsa_deploy", "vcsa_template"]
