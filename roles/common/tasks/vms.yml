@@ -135,9 +135,7 @@
   tags: ["pfsense"]
 
 - name: Another way to call 
-  known_hosts:
-    hostname: "{{ hostvars.pfsense.ansible_host }}"
-    state: present
+  local_action: shell ssh-keyscan -H {{ hostvars.pfsense.ansible_host }} >> ~/.ssh/known_hosts
   delegate_to: localhost
   tags: ["pfsense_post"]
 
