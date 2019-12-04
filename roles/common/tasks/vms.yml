@@ -135,7 +135,7 @@
   tags: ["pfsense"]
 
 - name: Copy config to pfsense
-  local_action: scp /mnt/usb/nfs/config.xml {{ hostvars.pfsense.ansible_host }}:/conf/config.xml
+  local_action: command scp /mnt/usb/nfs/config.xml {{ hostvars.pfsense.ansible_host }}:/conf/config.xml
   when: pfsense_new_config|bool == true
   tags: ["pfsense_post"]
 
