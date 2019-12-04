@@ -142,6 +142,7 @@
     state: mounted
   become: yes
   when: pfsense_new_config|bool == true
+  delegate_to: localhost
   tags: ["pfsense_post"]
 #  
 - name: Copy file
@@ -150,12 +151,14 @@
     dest: /conf/config.xml
     remote_src: yes
   when: pfsense_new_config|bool == true
+  delegate_to: localhost
   tags: ["pfsense_post"]
 
 - name: Reboot pfsense
   shell: reboot
   become: yes
   when: pfsense_new_config|bool == true
+  delegate_to: localhost
   tags: ["pfsense_post"]
 
 - name: Wait for ping to pfsense
@@ -179,7 +182,7 @@
   delay: 5 # Every 5 seconds
   delegate_to: localhost
   tags: ["pfsense"]
-  
+
 - name: Include vcsa vars
   include_vars: vcsa_vars.yml
   tags: ["vcsa_deploy", "vcsa_template"]
