@@ -101,7 +101,6 @@
   command: >
     "{{ pfsense_ovftool_path }}"
     --acceptAllEulas
-    --skipManifestCheck
     --noSSLVerify
     --name={{ pfsense_vm_name }}
     --X:logFile=/vmfs/volumes/{{ nfs_mount_name }}/ovftool.log
