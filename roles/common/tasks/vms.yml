@@ -107,7 +107,7 @@
     --diskMode={{ pfsense_provision_mode }}
     --datastore={{ default_datastore }}
     --powerOn
-    "{{ pfsense_ovftool_path }}"
+    "{{ pfsense_ovf_path }}"
     vi://'{{ esx_user }}':'{{ esx_password }}'@{{ esx_address }}
   when: pfsense_vm_name not in vms.dict
   tags: ["pfsense"]
