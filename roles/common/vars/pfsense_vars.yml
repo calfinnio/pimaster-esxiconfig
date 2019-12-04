@@ -7,5 +7,6 @@ pfsense_lan_ip: 10.64.0.1
 pfsense_provision_mode: thin
 pfsense_ovftool_path: /vmfs/volumes/{{ default_nfs }}/vmware-ovftool/ovftool
 pfsense_ovf_path: /vmfs/volumes/{{ default_nfs }}/pfsense.ovf
-pfsense_new_config: false
-pfsense_config_path: /mnt/nfs/pimaster/config.xml
+pfsense_new_config: true
+pfsense_config_path: /mnt/nfs/
+pfsense_config_filename: config.xml
