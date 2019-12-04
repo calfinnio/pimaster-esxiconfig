@@ -134,9 +134,24 @@
   delegate_to: localhost
   tags: ["pfsense"]
 
-- name: Include pfsense post_config
-  include_tasks: pfsense_post.yml
+- name: Copy config to pfsense
+  local_action: scp /mnt/usb/nfs/config.xml {{ hostvars.pfsense.ansible_host }}:/conf/config.xml
   when: pfsense_new_config|bool == true
+  tags: ["pfsense_post"]
+
+- name: Reboot pfsense vm
+  shell: govc vm.power -r {{ pfsense_vm_name }}
+  environment:
+    GOPATH: "{{ go_path }}"
+    PATH: "{{ go_bin }}"
+    GOVC_INSECURE: 1
+    GOVC_URL: "{{ esx_address }}"
+    GOVC_USERNAME: "{{ esx_user }}"
+    GOVC_PASSWORD: "{{ esx_password }}"
+    GOVC_DATASTORE: "{{ default_datastore }}"
+    GOVC_NETWORK: "{{ default_portgroup }}"
+    GOVC_RESOURCE_POOL: "*/Resources"
+  delegate_to: localhost
   tags: ["pfsense"]
 
 - name: Wait for ping to pfsense
