@@ -139,7 +139,7 @@
   tags: ["pfsense_post"]
 
 - name: Copy config to pfsense
-  local_action: command scp /mnt/usb/nfs/config.xml {{ hostvars.pfsense.ansible_host }}:/conf/config.xml
+  local_action: command scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r /mnt/usb/nfs/config.xml {{ hostvars.pfsense.ansible_host }}:/conf/config.xml
   when: pfsense_new_config|bool == true
   become: yes
   tags: ["pfsense_post"]
