@@ -134,15 +134,18 @@
   delegate_to: localhost
   tags: ["pfsense"]
 
-- name: Another way to call 
-  local_action: shell ssh-keyscan -H {{ hostvars.pfsense.ansible_host }} >> ~/.ssh/known_hosts
-  tags: ["pfsense_post"]
-
-- name: Copy config to pfsense
-  local_action: command scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r /mnt/usb/nfs/config.xml {{ hostvars.pfsense.ansible_host }}:/conf/config.xml
+- name: Include pfsense_post tasks
+  include_tasks: pfsense_post.yml
   when: pfsense_new_config|bool == true
-  become: yes
-  tags: ["pfsense_post"]
+#- name: Another way to call 
+#  local_action: shell ssh-keyscan -H {{ hostvars.pfsense.ansible_host }} >> ~/.ssh/known_hosts
+#  tags: ["pfsense_post"]
+
+#- name: Copy config to pfsense
+#  local_action: command scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r /mnt/usb/nfs/config.xml {{ hostvars.pfsense.ansible_host }}:/conf/config.xml
+#  when: pfsense_new_config|bool == true
+#  become: yes
+#  tags: ["pfsense_post"]
 
 - name: Reboot pfsense vm
   shell: govc vm.power -r {{ pfsense_vm_name }}
