@@ -136,7 +136,6 @@
 
 - name: Another way to call 
   local_action: shell ssh-keyscan -H {{ hostvars.pfsense.ansible_host }} >> ~/.ssh/known_hosts
-  delegate_to: localhost
   tags: ["pfsense_post"]
 
 - name: Copy config to pfsense
