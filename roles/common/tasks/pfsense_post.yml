@@ -1,19 +1,19 @@
 ---
-- hosts: homelab_pfsense
+- name: PostConfig 
+  hosts: homelab_pfsense
   tasks:
   - name: Mount NFS to directory
     shell: sudo mount {{ hostvars.pimaster.ansible_host }}:{{ nfs_share_path }} {{ pfsense_config_path }}
-    when: pfsense_new_config|bool == true
+    become: yes
     tags: ["pfsense_post"]
   - name: Copy file
     copy:
       src: "{{ pfsense_config_path }}{{ pfsense_config_filename }}"
       dest: /conf/config.xml
       remote_src: yes
-    when: pfsense_new_config|bool == true
+    become: yes
     tags: ["pfsense_post"]
   - name: Reboot pfsense
     shell: reboot
     become: yes
-    when: pfsense_new_config|bool == true
     tags: ["pfsense_post"]
