@@ -137,6 +137,7 @@
 - name: Include pfsense_post tasks
   include_tasks: pfsense_post.yml
   when: pfsense_new_config|bool == true
+  tags: ["pfsense"]
 #- name: Another way to call 
 #  local_action: shell ssh-keyscan -H {{ hostvars.pfsense.ansible_host }} >> ~/.ssh/known_hosts
 #  tags: ["pfsense_post"]
