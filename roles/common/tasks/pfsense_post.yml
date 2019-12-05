@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ hostvars.pfsense.ansible_host }}"
+- hosts: homelab_pfsense
   tasks:
   - name: Mount NFS to directory
     shell: sudo mount {{ hostvars.pimaster.ansible_host }}:{{ nfs_share_path }} {{ pfsense_config_path }}
