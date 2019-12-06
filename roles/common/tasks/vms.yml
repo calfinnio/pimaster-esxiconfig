@@ -144,6 +144,7 @@
 
 - name: Create nfs dir on pfsense
   local_action: command ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t {{ hostvars.pfsense.ansible_host }} "sudo mkdir {{ pfsense_config_path }}"
+  ignore_errors: yes
   when: pfsense_new_config|bool == true
   tags: ["pfsense_post"]
 
