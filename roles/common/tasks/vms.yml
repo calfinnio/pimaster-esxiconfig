@@ -142,8 +142,18 @@
 #  local_action: shell ssh-keyscan -H {{ hostvars.pfsense.ansible_host }} >> ~/.ssh/known_hosts
 #  tags: ["pfsense_post"]
 
-- name: Copy config to pfsense
-  local_action: command ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t 192.168.1.12 "sudo mkdir /mnt/test2"
+- name: Create nfs dir on pfsense
+  local_action: command ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t {{ hostvars.pfsense.ansible_host }} "sudo mkdir {{ pfsense_config_path }}"
+  when: pfsense_new_config|bool == true
+  tags: ["pfsense_post"]
+
+- name: mount NFS on pfsense
+  local_action: command ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t {{ hostvars.pfsense.ansible_host }} "sudo mount {{ hostvars.pimaster.ansible_host }}:{{ nfs_share_path }} {{ pfsense_config_path }}"
+  when: pfsense_new_config|bool == true
+  tags: ["pfsense_post"]
+
+- name: copy config from nfs to pfsense
+  local_action: command ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t {{ hostvars.pfsense.ansible_host }} "sudo cp {{pfsense_config_path}}{{pfsense_config_filename}} /conf/config.xml"
   when: pfsense_new_config|bool == true
   tags: ["pfsense_post"]
 
