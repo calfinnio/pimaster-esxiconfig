@@ -46,7 +46,7 @@
   tags: ["new_vmfs"]
 
 - name: Get end sector of disk
-  shell: eval expr $(partedUtil getptbl /vmfs/devices/disks/naa.50000c0f01f37874 | tail -1 | awk '{print $1 " \\* " $2 " \\* " $3}') - 1
+  shell: eval expr $(partedUtil getptbl /vmfs/devices/disks/{{ physical_disk_id }} | tail -1 | awk '{print $1 " \\* " $2 " \\* " $3}') - 1
   register: physical_disk_end_sector
   tags: ["new_vmfs"]
 
