@@ -54,9 +54,9 @@
   tags: ['vswitch']
 
 - name: Create missing vswitches
-  command: "esxcli network vswitch standard add --vswitch-name {{ item.key }}"
-  with_dict: "{{ network_vars }}"
-  when: item.key not in vswitches
+  command: "esxcli network vswitch standard add --vswitch-name {{ item.vswitchName }}"
+  with_items: "{{ vswitch_vars }}"
+  when: item.vswitchName not in vswitches
   tags: ['vswitch']
 
 - name: Create missing portgroups
@@ -65,12 +65,19 @@
   when: item.portgroup_name not in portgroups
   tags: ['vswitch']
 
+- name: Set PortGroup VLANs
+  command: "esxcfg-vswitch -p {{ item.portgroup_name }} -v {{ item.vlan }} {{ item.vswitchName }}"
+  with_items: "{{ pg_vars }}"
+  tags: ['vswitch']
+
 - name: Set default portgroup
   set_fact:
     default_portgroup: "{{ item.portgroup_name }}"
-  with_dict: "{{ pg__vars }}"
+  with_items: "{{ pg_vars }}"
   when: item.default|bool == true
   tags: ['vswitch']
+
+
 #- name: Create vSwitch - LabMgmt
 #  command: "esxcli network vswitch standard add --vswitch-name {{ item.vswitch_name }}"
 #  with_items: "{{ network_vars }}"

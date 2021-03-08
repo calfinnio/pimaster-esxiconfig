@@ -1,18 +1,16 @@
 ---
 pg_vars:
-  - pg_LabMgmt:
-      vswitchName: vswitch_LabMgmt
-      portgroup_name: pg_LabMgmt
-      default: True
-      vlan: 100
-  - Nested_ESXi:
-      vswitchName: vswitch_LabMgmt
-      portgroup_name: Nested_ESXi
-      default: False
-      vlan: 4095
+  - {vswitchName: vswitch_LabMgmt,
+      portgroup_name: pg_LabMgmt,
+      default: True,
+      vlan: 100}
+  - {vswitchName: vswitch_LabMgmt,
+      portgroup_name: Nested_ESXi,
+      default: False,
+      vlan: 4095}
 
 vswitch_vars:
-  
+  - {vswitchName: vswitch_LabMgmt}
 
 pfsense_vars:
  - vm_name: pfsense
