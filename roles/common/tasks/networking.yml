@@ -62,7 +62,6 @@
 - name: Set vswitch policies
   command: "esxcli network vswitch standard policy security set --allow-forged-transmits={{ item.allow-forged-transmits }} --allow-mac-change={{ item.allow-mac-change }} --allow-promiscuous={{ item.allow-promiscuous }} --vswitch-name={{ item.vswitchName }}"
   with_items: "{{ vswitch_vars }}"
-  when: item.vswitchName not in vswitches
   tags: ['vswitch']
 
 - name: Create missing portgroups
