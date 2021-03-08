@@ -62,14 +62,14 @@
 - name: Create missing portgroups
   command: "esxcli network vswitch standard portgroup add --portgroup-name {{ item.portgroup_name }} --vswitch-name {{ item.vswitchName }}"
   with_items: "{{ pg_vars }}"
-  when: item.value.portgroup_name not in portgroups
+  when: item.portgroup_name not in portgroups
   tags: ['vswitch']
 
 - name: Set default portgroup
   set_fact:
-    default_portgroup: "{{ item.value.portgroup_name }}"
+    default_portgroup: "{{ item.portgroup_name }}"
   with_dict: "{{ pg__vars }}"
-  when: item.value.default|bool == true
+  when: item.default|bool == true
   tags: ['vswitch']
 #- name: Create vSwitch - LabMgmt
 #  command: "esxcli network vswitch standard add --vswitch-name {{ item.vswitch_name }}"
