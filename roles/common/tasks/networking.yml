@@ -60,7 +60,7 @@
   tags: ['vswitch']
 
 - name: Set vswitch policies
-  command: "esxcli network vswitch standard policy security set -f {{ item.allow-forged-transmits }} -m {{ item.allow-mac-change }} -p {{ item.allow-promiscuous }} -v {{ item.vswitchName }}"
+  command: "esxcli network vswitch standard policy security set -f {{ item.allow_forged_transmits }} -m {{ item.allow_mac_change }} -p {{ item.allow_promiscuous }} -v {{ item.vswitchName }}"
   with_items: "{{ vswitch_vars }}"
   tags: ['vswitch']
 

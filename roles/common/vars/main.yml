@@ -11,9 +11,9 @@ pg_vars:
 
 vswitch_vars:
   - {vswitchName: vswitch_LabMgmt,
-      allow-forged-transmits: True,
-      allow-mac-change: True,
-      allow-promiscuous: True}
+      allow_forged_transmits: True,
+      allow_mac_change: True,
+      allow_promiscuous: True}
 
 pfsense_vars:
  - vm_name: pfsense
