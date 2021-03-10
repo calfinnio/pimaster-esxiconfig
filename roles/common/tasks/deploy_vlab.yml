@@ -180,7 +180,7 @@
   set_fact:
     network_id: "{{vc_networks.json | json_query(query) }}"
   vars:
-    query: "value[?name=='{{default_portgroup}}'].network"
+    query: "value[?name=='{{default_vesxiportgroup}}'].network"
   tags: ["api_calls"]
 
 - name: Get datastore_id

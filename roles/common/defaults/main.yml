@@ -1,4 +1,5 @@
 ---
 default_datastore: General1
 default_portgroup: pg_LabMgmt
+default_vesxiportgroup: Nested_ESXi
 default_nfs: PiMasterNFS
