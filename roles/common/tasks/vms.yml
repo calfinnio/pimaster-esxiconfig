@@ -333,21 +333,42 @@
   delegate_to: localhost
   tags: ["vms", "autostart"]
 
-- name: Login into vCenter with curl
-  command: "/bin/bash -c 'curl -k -s -X POST  -u {{ vcsa_username }}@{{ vcsa_sso_domain }}:{{ esx_password }} https://{{ vcsa_dns_name }}/rest/com/vmware/cis/session | jq .value'"
+- name: Login into vCenter and get cookies
+  uri:
+    url: https://{{ vcsa_dns_name }}/rest/com/vmware/cis/session
+    force_basic_auth: yes
+    validate_certs: no
+    method: POST
+    user: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
+    password: "{{ esx_password }}"
   register: login_svc
   delegate_to: localhost
   tags: ["vcsa_deploy2"]
 
-- name: Get content-library status from vCenter using cookies
-  command: "/bin/bash -c 'curl -k -s -X  GET https://{{ vcsa_dns_name }}/rest/appliance/vmon/service -H 'vmware-api-session-id: {{ login_svc }}' | jq '.value[] | select(.key=="content-library") | .value.state''"
-  register: _result
-  until: _result.status == 200
-  retries: 720 # 720 * 5 seconds = 1hour (60*60/5)
-  delay: 5 # Every 5 seconds
+- name: Get content-library service status from vCenter using cookies
+  uri:
+    url: https://{{ vcsa_dns_name }}/rest/appliance/vmon/service
+    force_basic_auth: yes
+    validate_certs: no
+    headers:
+      Cookie: "{{ login.set_cookie }}"
+  register: vc_svc
   delegate_to: localhost
   tags: ["vcsa_deploy2"]
-  
+
+- name: Debug vc_svc variable
+  debug:
+    msg: "{{ vc_svc }}"
+    verbosity: 2
+  tags: ["vcsa_deploy2"]
+
+- name: Set var for host_svc
+  set_fact:
+    svc_status: "{{vc_svc.json | json_query(query) }}"
+  vars:
+    query: "value[?name=='{{esx_address}}'].host"
+  tags: ["vcsa_deploy2"]  
+
 #- name: Include pfsense VM tasks
 #  include_tasks: pfsense.yml
 #  when: stvm.stdout == "0"
