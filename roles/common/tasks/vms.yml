@@ -354,7 +354,7 @@
     headers:
       Cookie: "{{ login_svc.set_cookie }}"
   register: vc_svc
-  #until: vc_svc | json_query(query) == "STARTED"
+  until: vc_svc.json | json_query(query) == "STARTED"
   retries: 720 # 720 * 5 seconds = 1hour (60*60/5)
   delay: 5 # Every 5 seconds
   delegate_to: localhost
