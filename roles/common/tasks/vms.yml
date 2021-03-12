@@ -351,9 +351,14 @@
     force_basic_auth: yes
     validate_certs: no
     headers:
-      Cookie: "{{ login.set_cookie }}"
+      Cookie: "{{ login_svc.set_cookie }}"
   register: vc_svc
+  until: {{ vc_svc.json | json_query(query) }} == "STARTED"
+  retries: 720 # 720 * 5 seconds = 1hour (60*60/5)
+  delay: 5 # Every 5 seconds
   delegate_to: localhost
+  vars:
+    query: "value[?key=='content-library'].value.state"
   tags: ["vcsa_deploy2"]
 
 - name: Debug vc_svc variable
