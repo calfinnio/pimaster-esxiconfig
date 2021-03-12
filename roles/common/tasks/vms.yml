@@ -354,7 +354,7 @@
     headers:
       Cookie: "{{ login_svc.set_cookie }}"
   register: vc_svc
-  until: vc_svc | json_query(query) == "STARTED"
+  #until: vc_svc | json_query(query) == "STARTED"
   retries: 720 # 720 * 5 seconds = 1hour (60*60/5)
   delay: 5 # Every 5 seconds
   delegate_to: localhost
@@ -364,16 +364,11 @@
 
 - name: Debug vc_svc variable
   debug:
-    msg: "{{ vc_svc }}"
+    msg: "{{ vc_svc | json_query(query) }}"
     verbosity: 2
-  tags: ["vcsa_deploy2"]
-
-- name: Set var for host_svc
-  set_fact:
-    svc_status: "{{vc_svc.json | json_query(query) }}"
   vars:
-    query: "value[?name=='{{esx_address}}'].host"
-  tags: ["vcsa_deploy2"]  
+    query: "value[?key=='content-library'].value.state"
+  tags: ["vcsa_deploy2"]
 
 #- name: Include pfsense VM tasks
 #  include_tasks: pfsense.yml
