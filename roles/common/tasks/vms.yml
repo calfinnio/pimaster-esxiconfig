@@ -367,7 +367,7 @@
     msg: "{{ vc_svc | json_query(query) }}"
     verbosity: 2
   vars:
-    query: "value[?key=='content-library'].value.state"
+    query: "value[*].value[?key=='content-library'].value.state"
   tags: ["vcsa_deploy2"]
 
 #- name: Include pfsense VM tasks
