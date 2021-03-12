@@ -364,7 +364,7 @@
 
 - name: Debug vc_svc variable
   debug:
-    msg: "{{ vc_svc | json_query(query) }}"
+    msg: "{{ vc_svc.json | json_query(query) }}"
     verbosity: 2
   vars:
     query: "value[*].value[?key=='content-library'].value.state"
