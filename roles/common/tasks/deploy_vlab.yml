@@ -25,8 +25,6 @@
 - name: Get all hosts in DC
   shell: govc ls /{{ vcsa_dc_name }}/host | /usr/bin/awk -F"/" '{print $NF}'
   environment:
-    GOPATH: "{{ go_path }}"
-    PATH: "{{ go_bin }}"
     GOVC_INSECURE: 1
     GOVC_URL: "{{ vcsa_dns_name }}"
     GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
@@ -50,8 +48,6 @@
 - name: Get Host IPs
   shell: govc host.info -dc={{ vcsa_dc_name }} -host={{ item }} -json | /usr/bin/jq -r .HostSystems[].Config.Network.Vnic[].Spec.Ip.IpAddress
   environment:
-    GOPATH: "{{ go_path }}"
-    PATH: "{{ go_bin }}"
     GOVC_INSECURE: 1
     GOVC_URL: "{{ vcsa_dns_name }}"
     GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
@@ -84,8 +80,6 @@
 - name: Get VMs to check before deploy
   shell: govc find -type VirtualMachine -json | /usr/bin/jq -r . | /usr/bin/awk -F"/" '{print $NF}'
   environment:
-    GOPATH: "{{ go_path }}"
-    PATH: "{{ go_bin }}"
     GOVC_INSECURE: 1
     GOVC_URL: "{{ vcsa_dns_name }}"
     GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"

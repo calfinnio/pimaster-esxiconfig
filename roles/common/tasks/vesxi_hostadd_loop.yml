@@ -41,8 +41,6 @@
 - name: Add physical host to datacenter
   shell: govc host.add -hostname={{ dns_hostname_string }} -password={{ esx_password }} -username={{ esx_user }} -dc={{ vcsa_dc_name }} -noverify=true
   environment:
-    GOPATH: "{{ go_path }}"
-    PATH: "{{ go_bin }}"
     GOVC_INSECURE: 1
     GOVC_URL: "{{ vcsa_dns_name }}"
     GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"

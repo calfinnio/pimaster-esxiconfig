@@ -159,8 +159,6 @@
 - name: Check powerstate of vesxi{{ outer_item }}
   shell: govc vm.info -json vesxi{{ outer_item }} | /usr/bin/jq .VirtualMachines[].Runtime.PowerState | /bin/sed 's/["\]//g'
   environment:
-    GOPATH: "{{ go_path }}"
-    PATH: "{{ go_bin }}"
     GOVC_INSECURE: 1
     GOVC_URL: "{{ vcsa_dns_name }}"
     GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"
@@ -180,8 +178,6 @@
 - name: PowerOn  vesxi{{ outer_item }}
   shell: govc vm.power -on {{ vesxi_basename }}{{ ansible_loop.index}}
   environment:
-    GOPATH: "{{ go_path }}"
-    PATH: "{{ go_bin }}"
     GOVC_INSECURE: 1
     GOVC_URL: "{{ vcsa_dns_name }}"
     GOVC_USERNAME: "{{ vcsa_username }}@{{ vcsa_sso_domain }}"

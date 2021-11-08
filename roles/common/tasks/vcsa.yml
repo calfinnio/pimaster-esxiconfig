@@ -18,8 +18,6 @@
   shell: govc import.ova -options={{ role_path }}/files/vcsa.json "{{ items.path }}" 
 #  shell: govc import.ova -options=vcsa3.json /mnt/usb/vcsa_iso/vcsa/VMware-vCenter-Server-Appliance-6.7.0.40000-14367737_OVF10.ova 
   environment:
-    GOPATH: "{{ go_path }}"
-    PATH: "{{ go_bin }}"
     GOVC_INSECURE: 1
     GOVC_URL: "{{ esx_address }}"
     GOVC_USERNAME: "{{ esx_user }}"

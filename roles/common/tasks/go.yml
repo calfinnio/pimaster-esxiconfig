@@ -16,9 +16,6 @@
 - name: govc test
   connection: local
   shell: govc version
-  environment:
-    GOPATH: "{{ go_path }}"
-    PATH: "{{ go_bin }}"
   register: govc_result
   tags: ["golang"] 
 
