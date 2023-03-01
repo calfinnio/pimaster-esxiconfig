@@ -1,6 +1,6 @@
 # PiMaster-ESXiConfig  
 Hopefully you are following this repo from the PiMaser bootstrap repo:  
-    https://github.com/seroles/pimaster.git  
+    https://github.com/calfinnio/pimaster.git  
 
 If you have then the following should be in place:  
   - ESXi booted and running the correct version (whatever you extracted)
